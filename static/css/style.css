@@ -135,13 +135,33 @@ nav {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1.8px;
-    transition: color 0.25s ease, text-shadow 0.25s ease;
+    transition: color 0.25s ease, text-shadow 0.25s ease, background 0.25s ease;
 }
 
 .nav-links a:hover,
 .nav-links a:focus-visible {
     color: var(--clr-cyan);
     text-shadow: 0 0 12px rgba(0, 242, 255, 0.25);
+}
+
+.nav-links a.login-link:hover,
+.nav-links a.login-link:focus-visible,
+.nav-links a.login-link:active {
+    color: transparent;
+    background: linear-gradient(135deg, #ffcc00, #ffc400);
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow: 0 0 14px rgba(255, 204, 0, 0.4);
+}
+
+.nav-links a.register-link:hover,
+.nav-links a.register-link:focus-visible,
+.nav-links a.register-link:active {
+    color: transparent;
+    background: linear-gradient(135deg, #5DADE2, #DA70D6, #FF69B4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow: 0 0 14px rgba(218, 112, 214, 0.4);
 }
 
 .nav-toggle {
@@ -203,6 +223,81 @@ nav {
     overflow: hidden;
 }
 
+.page-shell {
+    min-height: calc(100vh - var(--nav-height));
+    position: relative;
+    overflow: hidden;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    background: radial-gradient(circle at top left, rgba(0, 242, 255, 0.08), transparent 20%),
+                radial-gradient(circle at 85% 15%, rgba(255, 0, 122, 0.08), transparent 18%),
+                linear-gradient(180deg, #08090d 0%, var(--bg-deep) 100%);
+}
+
+.page-shell.gold-shell {
+    /* background: radial-gradient(circle at top left, rgba(255, 236, 179, 0.16), transparent 16%),
+                radial-gradient(circle at 85% 20%, rgba(255, 193, 7, 0.12), transparent 20%),
+                linear-gradient(135deg, #ffdd57 0%, #ffbc00 45%, #f7a800 100%); */
+}
+
+.page-shell.gold-shell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 25% 25%, rgba(255, 236, 179, 0.2), transparent 20%),
+                radial-gradient(circle at 75% 20%, rgba(255, 193, 7, 0.16), transparent 25%);
+    pointer-events: none;
+}
+
+.page-shell.gold-shell .glass-panel {
+    box-shadow: 0 28px 90px rgba(255, 204, 0, 0.25);
+}
+
+.page-shell.gold-shell .btn-primary {
+    background: linear-gradient(135deg, #ffdd57, #ffbc00, #f7a800);
+    color: #120800;
+    animation: gold-pulse 2.6s ease-in-out infinite;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.2);
+}
+
+.page-shell.gold-shell .gradient-text {
+    background: linear-gradient(45deg, #ffdd57, #ffbc00, #f7a800);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.page-shell.light-shell {
+    /* Light blue-violet-pink shell for register page */
+}
+
+.page-shell.light-shell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 25% 25%, rgba(93, 173, 226, 0.3), transparent 20%),
+                radial-gradient(circle at 75% 20%, rgba(218, 112, 214, 0.25), transparent 25%),
+                radial-gradient(circle at 50% 75%, rgba(255, 105, 180, 0.2), transparent 25%);
+    pointer-events: none;
+}
+
+.page-shell.light-shell .glass-panel {
+    box-shadow: 0 28px 90px rgba(218, 112, 214, 0.25);
+}
+
+.page-shell.light-shell .btn-primary {
+    background: linear-gradient(135deg, #5DADE2, #DA70D6, #FF69B4);
+    color: #050608;
+    animation: aurora-pulse 2.6s ease-in-out infinite;
+    box-shadow: 0 0 40px rgba(218, 112, 214, 0.3);
+}
+
+.page-shell.light-shell .gradient-text {
+    background: linear-gradient(45deg, #5DADE2, #DA70D6, #FF69B4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.page-shell::before,
 .hero::before {
     content: '';
     position: absolute;
@@ -210,6 +305,10 @@ nav {
     background: radial-gradient(circle at 20% 20%, rgba(0, 242, 255, 0.1), transparent 20%),
                 radial-gradient(circle at 80% 30%, rgba(255, 0, 122, 0.08), transparent 18%);
     pointer-events: none;
+}
+
+.hero::before {
+    opacity: 1;
 }
 
 .hero h1 {
@@ -258,6 +357,51 @@ nav {
     transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
     border: 1px solid transparent;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% -25%, rgba(255, 255, 255, 0.28), transparent 42%);
+    opacity: 0;
+    transform: translateY(0) scale(0.96);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.btn:hover::before,
+.btn:focus-visible::before {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.05);
+}
+
+@keyframes gold-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.35);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(255, 215, 0, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+    }
+}
+
+@keyframes aurora-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(64, 224, 208, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(255, 0, 128, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(64, 224, 208, 0);
+    }
 }
 
 .btn-primary {
@@ -270,6 +414,22 @@ nav {
     background: var(--bg-surface);
     color: #fff;
     border: 1px solid var(--border);
+}
+
+.btn-access {
+    background: #ffcc00;
+    color: #120800;
+    animation: gold-pulse 2.6s ease-in-out infinite;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-create {
+    background: linear-gradient(135deg, #40e0d0, #ff0080);
+    color: #fff;
+    animation: aurora-pulse 2.8s ease-in-out infinite;
+    box-shadow: 0 0 36px rgba(64, 224, 208, 0.18), 0 0 28px rgba(255, 0, 128, 0.14);
+    border-color: rgba(255, 255, 255, 0.12);
 }
 
 .btn:hover,
