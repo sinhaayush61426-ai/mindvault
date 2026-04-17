@@ -35,6 +35,8 @@ class DiaryEntry(db.Model):
     category = db.Column(db.String(50), default="General")
     encrypted_content = db.Column(db.LargeBinary, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    release_date = db.Column(db.DateTime, nullable=True)
+    is_time_locked = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 class Review(db.Model):
@@ -111,21 +113,50 @@ def home():
 @login_required
 def dashboard():
     entries = DiaryEntry.query.filter_by(user_id=current_user.id).order_by(DiaryEntry.timestamp.desc()).all()
+    now = datetime.utcnow()
+    for entry in entries:
+        if entry.release_date and entry.release_date > now:
+            entry.is_locked = True
+            entry.decrypted_content = None
+        else:
+            entry.is_locked = False
+            try:
+                entry.decrypted_content = cipher.decrypt(entry.encrypted_content).decode()
+            except:
+                entry.decrypted_content = "[Content could not be decrypted]"
     return render_template('dashboard.html', entries=entries)
 
-@app.route('/save-entry', methods=['POST'])
+@app.route('/seal-letter', methods=['POST'])
 @login_required
-def save_entry():
+def seal_letter():
     content = request.form.get('content')
+    release_date_str = request.form.get('release_date')
+    if not release_date_str:
+        flash('Release date is required for time-locked entries', 'error')
+        return redirect(url_for('dashboard'))
+    
+    try:
+        release_date = datetime.fromisoformat(release_date_str.replace('T', ' '))
+    except ValueError:
+        flash('Invalid release date format', 'error')
+        return redirect(url_for('dashboard'))
+    
+    if release_date <= datetime.utcnow():
+        flash('Release date must be in the future', 'error')
+        return redirect(url_for('dashboard'))
+    
     encrypted = cipher.encrypt(content.encode())
     new_entry = DiaryEntry(
         title=request.form.get('title'),
         category=request.form.get('category'),
         encrypted_content=encrypted,
+        release_date=release_date,
+        is_time_locked=True,
         user_id=current_user.id
     )
     db.session.add(new_entry)
     db.session.commit()
+    flash('Time-locked letter sealed!', 'success')
     return redirect(url_for('dashboard'))
 
 # --- CHARACTER MATRIX ROUTES ---
