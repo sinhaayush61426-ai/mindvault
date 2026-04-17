@@ -1,70 +1,120 @@
 # MindVault
 
-MindVault is a privacy-first digital journaling and emotional reflection platform built for secure self-expression.
+MindVault is a privacy-first digital journaling and emotional reflection platform designed to provide a psychologically safe, distraction-free space for introspection.
 
-It is designed to provide a psychologically safe, distraction-free space for introspection with a minimal dark aesthetic and server-side encryption. MindVault is intended as an open-source sanctuary for mental wellness, long-term reflection, and private journaling.
+Built with a minimal dark aesthetic, MindVault lets users write, encrypt, and store private reflections securely on their own machine. This repository is an open-source prototype for a personal wellness tool that can evolve into a full emotional intelligence workspace with local NLP, sentiment tracking, and future-dated letters.
 
-## What MindVault Is
+## Table of Contents
 
-MindVault is:
+- [Vision](#vision)
+- [Why MindVault?](#why-mindvault)
+- [What MindVault Does Today](#what-mindvault-does-today)
+- [How MindVault Works](#how-mindvault-works)
+- [Security and Privacy](#security-and-privacy)
+- [Project Architecture](#project-architecture)
+- [Getting Started](#getting-started)
+- [Usage Guide](#usage-guide)
+- [Developer Notes](#developer-notes)
+- [Future Roadmap](#future-roadmap)
+- [Contributing](#contributing)
+- [License](#license)
 
-- A secure, encrypted journal powered by Flask and SQLite.
-- A private place for reflections, mood tracking, and self-awareness.
-- A minimal interface that reduces cognitive load and encourages consistent writing.
-- A foundation for future local NLP sentiment analysis, emotional dashboards, and time-locked letters.
+## Vision
 
-## What MindVault Is Not
+MindVault is built to be a digital sanctuary for people who want to journal, reflect, and track emotional patterns without compromising privacy.
 
-- It is not a deployed production-ready service yet.
-- It does not currently rely on external AI APIs to analyze private content.
-- It is not a substitute for professional mental health care.
+The core idea is to create a secure, self-hosted space where personal data stays local, and sensitive thoughts never leave the vault. MindVault aims to remove noise and external tracking, focusing instead on meaningful, private self-reflection.
 
-## Core Concepts
+## Why MindVault?
 
-### Privacy by Design
+- Privacy-first: your words are encrypted before being written to disk.
+- Low distraction: a clean, dark interface keeps the writing flow uninterrupted.
+- Trustworthy foundations: no external AI APIs are required to use the app.
+- Progress-focused: the platform is intentionally designed to grow toward emotional insights over time.
 
-- User accounts are protected with password hashing using `Flask-Bcrypt`.
-- Journal entries are encrypted in the database using `cryptography.Fernet`.
-- The app avoids sending private journal content to third-party services.
+## What MindVault Does Today
 
-### Minimal Dark UI
+MindVault currently provides a working prototype for the following capabilities:
 
-- The interface is designed to be calm and distraction-free.
-- Dark mode and minimal styling help keep focus on reflection.
+- User registration and login with secure password hashing
+- Encrypted diary entries stored in a local SQLite database
+- A personal dashboard showing the user's recent entries
+- A lightweight home page with approved community reviews
+- Server-side encryption using `cryptography.Fernet`
+- Basic route protection with `Flask-Login`
 
-### Journal Vault
+## How MindVault Works
 
-- Entries are stored behind a login wall and encrypted at rest.
-- This creates a vault-like feeling for personal ideas, notes, and emotional processing.
+The application is built using Flask and stores data in SQLite for a lightweight local experience.
 
-## Features Included Today
+### Core application flow
 
-- User registration and login
-- Secure password hashing
-- Encrypted diary entry storage
-- Personal dashboard with an entry listing
-- Review section on the home page
-- SQLite database backend for easy local setup
+1. A user registers with a username, email, and password.
+2. The password is hashed using `Flask-Bcrypt` and stored in the database.
+3. The user logs in and accesses a protected dashboard.
+4. When the user saves a journal entry, the entry text is encrypted before persisting.
+5. Encrypted content is stored in the database and only decrypted when needed.
 
-## Future Enhancements
+### Data model
 
-MindVault is poised for more advanced features such as:
+- `User` stores account metadata and relationships to entries.
+- `DiaryEntry` stores encrypted content together with metadata like title, category, timestamp, and author.
+- `Review` stores public reviews shown on the front page.
 
-- Local Natural Language Processing (NLP) sentiment analysis
-- Emotional trend dashboards with charts and insights
-- Time-locked "Letters to the Future"
-- Smart vault access controls and optional recovery keys
-- Secure export / backup of encrypted journals
-- Multi-factor authentication and stronger key management
+### Encryption model
 
-## Project Structure
+- The app uses `Fernet` symmetric encryption from `cryptography`.
+- Text content is encrypted server-side and stored as binary data.
+- The current key is generated at runtime for demo purposes; a production deployment should load a persistent key from secure configuration.
 
-- `app.py` - Flask application logic, user auth, entry creation, and database models
-- `security.py` - Encryption utilities for text at rest
-- `requirements.txt` - Python dependencies
-- `templates/` - HTML templates for pages like login, register, dashboard, and reviews
-- `static/` - CSS and JavaScript assets
-- `instance/` - Local instance-specific data files
+## Security and Privacy
+
+MindVault is designed to keep private data out of the cloud and away from third-party service providers.
+
+### Current security protections
+
+- Password hashing with `Flask-Bcrypt`
+- Encrypted journal content using `Fernet`
+- Protected pages with `Flask-Login`
+- Local SQLite storage for easy self-hosting
+
+### Important security notes
+
+- This implementation is a prototype, not a fully hardened production system.
+- The encryption key should be stored in an environment variable or secure key manager.
+- Secrets and database files such as `.env`, `mindvault.db`, `database.db`, and other sensitive assets should be excluded from version control.
+
+## Project Architecture
+
+```
+mindvault/
+├─ app.py
+├─ security.py
+├─ requirements.txt
+├─ README.md
+├─ templates/
+│  ├─ base.html
+│  ├─ dashboard.html
+│  ├─ entry.html
+│  ├─ index.html
+│  ├─ login.html
+│  ├─ register.html
+│  ├─ submit_review.html
+├─ static/
+│  ├─ css/style.css
+│  ├─ js/main.js
+├─ instance/
+│  └─ mindvault.db
+```
+
+### File responsibilities
+
+- `app.py` - main Flask application and route handlers.
+- `security.py` - encryption helper utilities and key generation.
+- `requirements.txt` - pinned Python dependencies for the environment.
+- `templates/` - HTML views rendered by Flask.
+- `static/` - styling and client-side behavior.
+- `instance/` - SQLite database and other runtime-generated files.
 
 ## Getting Started
 
@@ -72,74 +122,114 @@ MindVault is poised for more advanced features such as:
 
 - Python 3.11 or later
 - `pip` package manager
-- Optional: a virtual environment for isolation
+- Optional: `virtualenv` or `venv` for environment isolation
 
-### Install
-
-1. Clone the repository:
+### Installation
 
 ```bash
 git clone https://github.com/sinhaayush61426-ai/mindvault.git
 cd mindvault
-```
-
-2. Create and activate a virtual environment:
-
-```bash
 python3 -m venv venv
 source venv/bin/activate
-```
-
-3. Install dependencies:
-
-```bash
 pip install -r requirements.txt
 ```
 
-### Run MindVault
-
-Start the application:
+### Run the application
 
 ```bash
 python app.py
 ```
 
-Then open your browser at:
+Open the app in a browser at:
 
 ```text
 http://127.0.0.1:5000
 ```
 
-### Register and Use
+### First-time setup
 
-1. Create a new account via `/register`.
-2. Log in at `/login`.
-3. Save journal entries from the dashboard.
-4. Your content is encrypted before it is stored in `mindvault.db`.
+- Navigate to `/register` and create a new user.
+- Use `/login` to sign in.
+- Write entries from the dashboard and see them saved securely.
 
-## How It Works
+## Usage Guide
 
-- `Flask-Login` manages secure sessions and protected routes.
-- `Flask-Bcrypt` hashes user passwords before storage.
-- `cryptography.Fernet` encrypts journal content using a generated key.
-- Entries are saved in an SQLite database (`mindvault.db`) in the project root.
+### Writing a reflection
 
-## Notes on Security
+- Add a title and category for your entry.
+- Type freely in the journal content area.
+- Save the entry to encrypt it and store it securely.
 
-- The current encryption key is generated at runtime for demonstration purposes.
-- For production, store keys and secrets in environment variables or a secure vault.
-- Add a `.gitignore` file to keep `.env`, database files, and other secrets outside version control.
+### Reviewing entries
+
+- Your encrypted entries are displayed on the dashboard.
+- The app currently displays entries in reverse chronological order so your latest reflections are easiest to access.
+
+### Managing account access
+
+- Log out anytime using the logout route.
+- Because content is encrypted, the data remains protected while stored locally.
+
+## Developer Notes
+
+### Understanding `app.py`
+
+- `@app.route('/register')` handles account creation.
+- `@app.route('/login')` handles authentication.
+- `@app.route('/dashboard')` displays the user's private entries.
+- `@app.route('/save-entry')` encrypts and saves journal content.
+
+### Understanding `security.py`
+
+- `generate_key()` returns a new `Fernet` encryption key.
+- `VaultSecurity` provides `encrypt_text` and `decrypt_text` helpers for string encryption.
+
+### Local development tips
+
+- Add `.env` support for secret configuration.
+- Switch the runtime-generated key to a persistent secret in `.env`.
+- Add a `.gitignore` file for sensitive files and local SQLite databases.
+
+### Suggested improvements
+
+- Add search, tags, and categories for richer journal organization.
+- Add local analytics dashboards for emotional trends over time.
+- Add support for time-locked entries that unlock on a future date.
+- Add tests for authentication, encryption, and form handling.
+
+## Future Roadmap
+
+The project is intended to grow into a more complete journaling and emotional wellness workspace.
+
+### Planned features
+
+- Local sentiment analysis powered entirely on-device
+- Emotion trend visualizations and heatmaps
+- Time-locked "Letters to the Future" with release dates
+- Secure export/import of encrypted journal archives
+- Advanced authentication with 2FA and recovery keys
+- Privacy-preserving reminder and habit features
+
+### Long-term vision
+
+MindVault is more than a diary: it is a personal vault for self-reflection, emotional awareness, and safe record-keeping. Over time, the app should help users see patterns, recall meaningful moments, and cultivate lasting emotional habits without sacrificing privacy.
 
 ## Contributing
 
-Contributions are welcome. Suggested improvements include:
+Contributions are welcome. If you want to help make MindVault stronger, please:
 
-- Adding local NLP sentiment scoring
-- Implementing graph-based emotion dashboards
-- Expanding the entry model with tags, moods, and private prompts
-- Building a time-locked letter feature
-- Improving authentication and key storage
+- Open issues for bugs or new feature ideas
+- Submit pull requests with clean, documented code
+- Keep security and privacy at the center of every enhancement
+
+### Good contribution ideas
+
+- Add local NLP sentiment scoring
+- Implement graph-based emotional dashboards
+- Expand the entry model with tags, mood labels, and prompts
+- Build time-locked letters and future notes
+- Improve authentication, encryption, and key storage
 
 ## License
 
-This project is open source. Feel free to fork, experiment, and adapt MindVault for your own secure journaling workflow.
+This project is open source and available for learning, experimentation, and personal use. Feel free to fork, modify, and adapt MindVault to your secure journaling needs.
