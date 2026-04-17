@@ -1,174 +1,369 @@
-# MindVault
+# MindVault v2.0
 
-MindVault is a privacy-first digital journaling and emotional reflection platform designed to provide a psychologically safe, distraction-free space for introspection.
+**MindVault** is a privacy-first, high-intensity creative workspace designed for secure reflections, professional research, and fiction writing projects. Built for writers, researchers, and creatives who demand both security and flexibility.
 
-Built with a minimal dark aesthetic, MindVault lets users write, encrypt, and store private reflections securely on their own machine. This repository is an open-source prototype for a personal wellness tool that can evolve into a full emotional intelligence workspace with local NLP, sentiment tracking, and future-dated letters.
+MindVault provides encrypted storage, version control for your work, an immersive focus mode, and works offline as a progressive web app. All your data is yours—stored locally with zero-knowledge encryption.
+
+**✨ New in v2.0**: Character Matrix, Draft Versioning, Zen Mode, Progressive Web App, Biometric Auth, Global CSS Variables.
 
 ## Table of Contents
 
 - [Vision](#vision)
-- [Why MindVault?](#why-mindvault)
-- [What MindVault Does Today](#what-mindvault-does-today)
-- [How MindVault Works](#how-mindvault-works)
-- [Security and Privacy](#security-and-privacy)
+- [Key Features](#key-features)
+- [What's New in v2.0](#whats-new-in-v20)
+- [How It Works](#how-it-works)
+- [Security & Privacy](#security--privacy)
 - [Project Architecture](#project-architecture)
 - [Getting Started](#getting-started)
 - [Usage Guide](#usage-guide)
-- [Developer Notes](#developer-notes)
+- [PWA Installation](#pwa-installation)
+- [Developer Guide](#developer-guide)
 - [Future Roadmap](#future-roadmap)
 - [Contributing](#contributing)
 - [License](#license)
 
 ## Vision
 
-MindVault is built to be a digital sanctuary for people who want to journal, reflect, and track emotional patterns without compromising privacy.
+MindVault is your **personal sanctuary for creation and reflection**. We believe that writers, researchers, and creative professionals deserve:
 
-The core idea is to create a secure, self-hosted space where personal data stays local, and sensitive thoughts never leave the vault. MindVault aims to remove noise and external tracking, focusing instead on meaningful, private self-reflection.
+- A **secure vault** that never syncs to the cloud
+- **Complete creative control** over character development, drafts, and iterations
+- A **focus-first environment** that eliminates distractions
+- **Offline-first access** that works anywhere, anytime
+- **Zero tracking**—no analytics, no third-party services, no compromise
 
-## Why MindVault?
+Whether you're journaling, writing a novel, researching, or developing complex characters, MindVault keeps your work private, organized, and always within reach.
 
-- Privacy-first: your words are encrypted before being written to disk.
-- Low distraction: a clean, dark interface keeps the writing flow uninterrupted.
-- Trustworthy foundations: no external AI APIs are required to use the app.
-- Progress-focused: the platform is intentionally designed to grow toward emotional insights over time.
+## Key Features
 
-## What MindVault Does Today
+### 🔐 Security & Privacy
+- **Zero-Knowledge Encryption**: Your entries are encrypted client-side using Fernet
+- **Local-First**: All data stored on your machine by default
+- **Open Source**: Audit the code yourself; no black boxes
+- **Biometric Auth**: Face ID / Touch ID / Windows Hello for quick secure access
 
-MindVault currently provides a working prototype for the following capabilities:
+### ✍️ Creative Tools
+- **Character Matrix**: Build rich character profiles with personality traits, backstories, and relationship maps
+- **Draft Versioning**: Save unlimited snapshots with version history; restore any version anytime
+- **Zen Mode**: Distraction-free focus writing with real-time word/character counter
+- **Auto-Save**: Draft protection every 30 seconds to localStorage
 
-- User registration and login with secure password hashing
-- Encrypted diary entries stored in a local SQLite database
-- A personal dashboard showing the user's recent entries
-- A lightweight home page with approved community reviews
-- Server-side encryption using `cryptography.Fernet`
-- Basic route protection with `Flask-Login`
+### 📱 Mobile & Offline
+- **Progressive Web App**: Install on phone, tablet, or desktop like a native app
+- **Offline Mode**: Full functionality without internet; automatic sync when connected
+- **App Shortcuts**: Quick access to "New Entry" and "Character Matrix" from home screen
+- **Background Sync**: Pending entries queue and sync automatically
 
-## How MindVault Works
+### 🎨 Beautiful & Intentional
+- **Cyberpunk Aesthetic**: High-intensity, dark interface with cyan/violet/pink gradients
+- **Global Design System**: Consistent spacing, colors, and transitions across all features
+- **SVG Icon Library**: 14 custom icons that scale perfectly at any size
+- **Responsive Design**: Optimized for mobile, tablet, and desktop
 
-The application is built using Flask and stores data in SQLite for a lightweight local experience.
+## What's New in v2.0
 
-### Core application flow
+### 🎭 Author's Archive
+**Character Matrix** - Professional character development for fiction writers. Create detailed character profiles including personality traits, backstory, physical description, motivations, and relationship dynamics. Organize characters with color-coded avatars and quick-access matrix layout.
 
-1. A user registers with a username, email, and password.
-2. The password is hashed using `Flask-Bcrypt` and stored in the database.
-3. The user logs in and accesses a protected dashboard.
-4. When the user saves a journal entry, the entry text is encrypted before persisting.
-5. Encrypted content is stored in the database and only decrypted when needed.
+**Draft Versioning** - Never lose your work again. Save unlimited snapshots of your entries with custom version numbers (e.g., "1.0", "1.1", "2.0"). Each snapshot is frozen in time with optional descriptions. Restore any previous version with one click.
 
-### Data model
+### 🧘 Zen Mode
+Pure writing focus. Hide all navigation and sidebars. Real-time word/character counter in the corner. Your preference persists—next time you write, Zen Mode returns automatically.
 
-- `User` stores account metadata and relationships to entries.
-- `DiaryEntry` stores encrypted content together with metadata like title, category, timestamp, and author.
-- `Review` stores public reviews shown on the front page.
+### 📲 Progressive Web App
+- Install MindVault on any device like a native app
+- Works offline with automatic sync when connection returns
+- Push notifications for vault updates
+- App shortcuts for quick access
+- Service Worker caching for instant load times
 
-### Encryption model
+### 🔐 Biometric Authentication
+- Face ID on iPhone/iPad
+- Touch ID on Mac
+- Windows Hello (iris/face/PIN)
+- Android biometric scanner
+- No passwords needed for daily access
 
-- The app uses `Fernet` symmetric encryption from `cryptography`.
-- Text content is encrypted server-side and stored as binary data.
-- The current key is generated at runtime for demo purposes; a production deployment should load a persistent key from secure configuration.
+### 🎨 Global Design System
+- 20+ CSS variables for colors, spacing, transitions, and layout
+- Light variant color palette for the register page
+- Consistent typography system with font weights
+- Z-index layer system for proper stacking
+- Transition timing for predictable animations
 
-## Security and Privacy
+### 🖼️ SVG Icon Library
+14 custom-coded SVG icons: Shield, Star, Matrix, Character, Version, Zen, Lock, Biometric, Download, Snapshot, Edit, Trash, Settings, Export, and Refresh. Sized from small (1rem) to extra-large (3.5rem) with customizable colors.
 
-MindVault is designed to keep private data out of the cloud and away from third-party service providers.
+## How It Works
 
-### Current security protections
+The application is built using **Flask** on the backend and modern browser APIs on the frontend. All data encryption happens before storage. Offline-first architecture means you own your data completely.
 
-- Password hashing with `Flask-Bcrypt`
-- Encrypted journal content using `Fernet`
-- Protected pages with `Flask-Login`
-- Local SQLite storage for easy self-hosting
+### Core Application Flow
 
-### Important security notes
+1. **User Registration** - Sign up with username, email, and password (hashed with Bcrypt)
+2. **Authentication** - Login with password OR biometric (Face ID/Touch ID)
+3. **Create Entries** - Write in the editor; auto-save saves drafts every 30 seconds
+4. **Versioning** - Take snapshots at any point; each snapshot is encrypted and immutable
+5. **Organization** - Create character profiles for fiction projects; tag and categorize entries
+6. **Focus Writing** - Toggle Zen Mode for distraction-free writing with word counter
+7. **Offline Access** - Service Worker caches app; continue working without internet
+8. **Sync & Backup** - Pending entries queue up offline; sync automatically on reconnection
 
-- This implementation is a prototype, not a fully hardened production system.
-- The encryption key should be stored in an environment variable or secure key manager.
-- Secrets and database files such as `.env`, `mindvault.db`, `database.db`, and other sensitive assets should be excluded from version control.
+### Data Model (v2.0)
+
+- **User**: Account metadata, relationships to entries and characters
+- **DiaryEntry**: Encrypted content, title, category, timestamp, author reference
+- **EntrySnapshot**: Version number, frozen encrypted content, description, timestamp, auto-save flag
+- **Character**: Name, archetype, personality traits, backstory, relationships, motivations, physical description, avatar color
+- **Review**: Public testimonials shown on homepage
+
+### Encryption Model
+
+- **Fernet Symmetric Encryption**: AES-128 in CBC mode with HMAC authentication
+- **Client-Side Encryption**: Content encrypted in memory before transmission
+- **Key Management**: Encryption key (production use: load from secure environment variable)
+- **Zero-Knowledge**: Server never has plaintext access to entry content
+- **Snapshot Integrity**: Each version snapshot independently encrypted and authenticated
+
+### Service Worker & Offline
+
+- **Network-First Strategy**: Try server first; fallback to cache on failure
+- **Cache Versioning**: Old caches automatically cleared on app update
+- **Background Sync**: Pending entries stored in IndexedDB; sync when online
+- **Offline Fallback**: `/offline.html` page shows connection status with auto-retry
+
+## Security & Privacy
+
+MindVault is designed with security as the foundation, not an afterthought.
+
+### Current Security Architecture
+
+- **Password Hashing**: Bcrypt with salting (not reversible)
+- **Entry Encryption**: Fernet (AES-128 + HMAC) before database storage
+- **Route Protection**: Flask-Login session management; @login_required for sensitive endpoints
+- **Biometric Authentication**: Web Authentication API (WebAuthn) using platform hardware
+- **Local Storage**: SQLite database stored on your system; no cloud sync by default
+- **Transport Security**: HTTPS recommended for production
+- **Service Worker Integrity**: Script controls cache and only allows whitelisted assets
+
+### What's Protected
+
+- ✅ Journal entry content (encrypted)
+- ✅ Character profiles and relationships (encrypted)
+- ✅ Snapshot history (encrypted)
+- ✅ User passwords (hashed)
+- ✅ Offline draft storage (IndexedDB)
+- ✅ Auto-save revisions (localStorage)
+
+### Important Notes for Production
+
+- Store encryption key in environment variable (`.env`), not in code
+- Use HTTPS for all production deployments
+- Add database backups to your security checklist
+- Consider database encryption at rest (depending on hosting environment)
+- Keep Flask debug mode disabled in production
+- Regularly update dependencies for security patches
+
+### Data Ownership
+
+- **You own all your data** - stored locally on your device
+- **No analytics tracking** - we don't know who you are or what you write
+- **No AI training** - your entries are not used to train LLMs or any models
+- **No advertising** - MindVault is not monetized through your data
+- **Open source** - audit the code yourself; no hidden functionality
+- **Portable data** - export and take your vault elsewhere anytime
 
 ## Project Architecture
 
 ```
 mindvault/
-├─ app.py
-├─ security.py
-├─ requirements.txt
-├─ README.md
-├─ templates/
-│  ├─ base.html
-│  ├─ dashboard.html
-│  ├─ entry.html
-│  ├─ index.html
-│  ├─ login.html
-│  ├─ register.html
-│  ├─ submit_review.html
-├─ static/
-│  ├─ css/style.css
-│  ├─ js/main.js
-├─ instance/
-│  └─ mindvault.db
+├── app.py                              # Flask app + SQLAlchemy models + routes
+├── security.py                         # Encryption utilities
+├── requirements.txt                    # Python dependencies
+├── manifest.json                       # PWA configuration
+├── EXPANSION.md                        # v2.0 feature documentation
+├── MIGRATION.md                        # Upgrade guide for v1 → v2
+│
+├── templates/
+│   ├── base.html                      # Base template (PWA + new scripts)
+│   ├── index.html                     # Homepage
+│   ├── login.html                     # Login form (with biometric option)
+│   ├── register.html                  # Registration (with biometric setup)
+│   ├── dashboard.html                 # Main vault interface
+│   ├── characters.html                # Character matrix grid
+│   ├── character_form.html            # Create/edit character
+│   ├── snapshots.html                 # Version history timeline
+│   ├── view_entry.html                # Entry detail + snapshot creation
+│   ├── offline.html                   # Offline fallback
+│   └── submit_review.html             # Community review form
+│
+├── static/
+│   ├── css/
+│   │   ├── style.css                  # Main styles (with global variables)
+│   │   └── expansion.css              # v2.0: Zen Mode, Character, Snapshots
+│   ├── js/
+│   │   ├── service-worker.js          # PWA offline + caching
+│   │   ├── biometric-auth.js          # Web Authentication API
+│   │   ├── enhanced-main.js           # Zen Mode + auto-save + init
+│   │   └── main.js                    # (legacy - for existing features)
+│   ├── svg-icons.html                 # SVG icon library (14 icons)
+│   └── images/                        # App icons for PWA
+│
+└── instance/
+    └── mindvault.db                   # SQLite database (gitignored)
 ```
 
-### File responsibilities
+### Key Files & Responsibilities
 
-- `app.py` - main Flask application and route handlers.
-- `security.py` - encryption helper utilities and key generation.
-- `requirements.txt` - pinned Python dependencies for the environment.
-- `templates/` - HTML views rendered by Flask.
-- `static/` - styling and client-side behavior.
-- `instance/` - SQLite database and other runtime-generated files.
+**Backend:**
+- `app.py` - Flask app, 25+ routes including character/snapshot management
+- `security.py` - Fernet encryption helpers
+
+**Frontend - Styling:**
+- `style.css` - Main styles with 20+ CSS variables (colors, spacing, transitions, fonts, z-index)
+- `expansion.css` - v2.0 features (Zen Mode, Character Matrix, Snapshots, Timeline UI)
+
+**Frontend - JavaScript:**
+- `service-worker.js` - PWA offline support, caching strategy, background sync
+- `biometric-auth.js` - WebAuthn implementation for Face ID/Touch ID
+- `enhanced-main.js` - Zen Mode toggle, auto-save manager, SW registration, app initialization
+- `main.js` - (legacy features)
+
+**Frontend - UI:**
+- `svg-icons.html` - Reusable SVG icon components with size/color variants
+- `base.html` - Base template with PWA manifest, flash messages, CSS/JS loading
+
+**PWA Configuration:**
+- `manifest.json` - App metadata, icons, shortcuts, theme colors, share target API
+- Service Worker enables offline mode and installation
+
+**Documentation:**
+- `README.md` - This file
+- `EXPANSION.md` - Detailed v2.0 feature guide (500+ lines)
+- `MIGRATION.md` - Upgrade path from v1 to v2 (fully backward compatible)
 
 ## Getting Started
 
 ### Prerequisites
 
-- Python 3.11 or later
-- `pip` package manager
-- Optional: `virtualenv` or `venv` for environment isolation
+- **Python 3.11+** (or 3.10 with compatibility adjustments)
+- **pip** package manager
+- **Optional**: `virtualenv` or `venv` for environment isolation
 
 ### Installation
 
 ```bash
+# Clone the repository
 git clone https://github.com/sinhaayush61426-ai/mindvault.git
 cd mindvault
+
+# Create virtual environment (recommended)
 python3 -m venv venv
-source venv/bin/activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-### Run the application
+### Run MindVault
 
 ```bash
-python app.py
+python3 app.py
 ```
 
-Open the app in a browser at:
+Open your browser to:
 
-```text
+```
 http://127.0.0.1:5000
 ```
 
-### First-time setup
+### First-Time Setup
 
-- Navigate to `/register` and create a new user.
-- Use `/login` to sign in.
-- Write entries from the dashboard and see them saved securely.
+1. **Register** - Go to `/register` and create an account
+2. **Set Biometric** (Optional) - Click "🔐 Biometric Setup" if your device supports it
+3. **Login** - Use password or biometric to login
+4. **Dashboard** - Start writing entries, create characters, explore features
+5. **Install PWA** (Optional) - See [PWA Installation](#pwa-installation) below
+
+### Environment Variables
+
+Create a `.env` file in the project root (optional for development):
+
+```
+SECRET_KEY=your-secret-key-here
+DATABASE_URL=sqlite:///mindvault.db
+DEBUG=False
+FLASK_ENV=production
+```
+
+For production, use a strong `SECRET_KEY` and secure `DATABASE_URL`.
 
 ## Usage Guide
 
-### Writing a reflection
+### 📝 Writing Entries
 
-- Add a title and category for your entry.
-- Type freely in the journal content area.
-- Save the entry to encrypt it and store it securely.
+1. Go to **Dashboard** (main vault interface)
+2. Enter a **title** and select a **category**:
+   - General
+   - Novella/Fiction
+   - Science Research
+3. Write freely in the editor
+4. **Auto-save** saves your draft every 30 seconds (look for "✓ Draft saved" indicator)
+5. Click **"Seal Entry"** to encrypt and permanently save
 
-### Reviewing entries
+### 🎭 Character Matrix
 
-- Your encrypted entries are displayed on the dashboard.
-- The app currently displays entries in reverse chronological order so your latest reflections are easiest to access.
+1. Click **"Characters"** in navigation
+2. Click **"+ Create Character"** to add a character:
+   - **Name**: Character identifier
+   - **Archetype**: Protagonist, Antagonist, Mentor, Support, or Other
+   - **Personality Traits**: Key qualities (e.g., "mysterious, strategic, loyal")
+   - **Backstory**: Origin and history
+   - **Physical Description**: Appearance and distinctive features
+   - **Motivations**: What drives the character
+   - **Relationships**: Connections to other characters
+   - **Avatar Color**: Visual identifier (hex color code)
+3. View all characters in the matrix grid
+4. Click character cards to view details
+5. Use **Edit** to modify or **Delete** to remove
 
-### Managing account access
+### 📸 Draft Versioning (Snapshots)
 
-- Log out anytime using the logout route.
-- Because content is encrypted, the data remains protected while stored locally.
+1. Open any entry (click from dashboard)
+2. Make changes to the content
+3. Scroll to **"Save as New Version"** section
+4. Enter version number (e.g., "1.1", "2.0")
+5. Optionally add a description (e.g., "Fixed chapter 3")
+6. Click **"📸 Create Snapshot"**
+7. Click **"📸 Versions"** button to see full timeline
+8. View all snapshots in chronological order
+9. Click **"↩️ Restore This Version"** to reload any past version
+
+### 🧘 Zen Mode (Focus Writing)
+
+1. Click **"🧘 Zen Mode"** button (on dashboard or entry view)
+2. Navigation and sidebars fade away
+3. **Word/Character Counter** appears in bottom-right
+4. Write uninterrupted—counter updates in real-time
+5. Click **"Exit Zen"** button (top-right) to return to normal view
+6. Your Zen preference persists—next session returns to Zen if saved in Zen
+
+### 💾 Auto-Save & Draft Recovery
+
+- Auto-save triggers every 30 seconds while editing
+- Drafts are stored locally in browser storage
+- **"✓ Draft saved"** indicator appears briefly after each save
+- If you accidentally close the page, draft is recovered on return
+- Click **"Seal Entry"** to encrypt and save permanently
+
+### 🌐 Offline Access
+
+1. Open MindVault and use normally
+2. Service Worker automatically caches all pages and assets
+3. **Disconnect from internet**—MindVault continues working
+4. Create new entries; they queue in IndexedDB
+5. **Reconnect to internet**—pending entries sync automatically
+6. Offline indicator shows connection status; auto-retries every 3 seconds
 
 ## Developer Notes
 
