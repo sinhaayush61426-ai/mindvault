@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Character Matrix - MindVault{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h1 class="section-title gradient-text" style="margin-bottom: 0.5rem;">Character Matrix</h1>
+        <p class="section-copy" style="margin-bottom: 3rem;">Manage your character profiles for creative projects and narrative development.</p>
+
+        <div style="display: flex; gap: 2rem; margin-bottom: 2rem;">
+            <a href="{{ url_for('new_character') }}" class="btn btn-primary">+ Create Character</a>
+        </div>
+
+        {% if characters %}
+            <div class="character-matrix">
+                {% for character in characters %}
+                    <div class="character-card" style="--avatar-color: {{ character.avatar_color }};">
+                        <div class="character-avatar">{{ character.name[0].upper() }}</div>
+                        <div class="character-name">{{ character.name }}</div>
+                        <div class="character-archetype">{{ character.archetype }}</div>
+                        {% if character.personality_traits %}
+                            <div class="character-traits">{{ character.personality_traits[:60] }}...</div>
+                        {% endif %}
+                        <div class="character-actions">
+                            <a href="{{ url_for('edit_character', character_id=character.id) }}" class="character-btn">Edit</a>
+                            <form method="POST" action="{{ url_for('delete_character', character_id=character.id) }}" style="flex: 1;">
+                                <button type="submit" class="character-btn" onclick="return confirm('Delete this character?')" style="width: 100%;">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="glass-panel form-card" style="text-align: center; padding: 3rem;">
+                <p class="section-copy" style="margin-bottom: 2rem;">No characters created yet. Start building your character matrix!</p>
+                <a href="{{ url_for('new_character') }}" class="btn btn-primary">Create First Character</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<style>
+    .character-matrix {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
+    }
+</style>
+{% endblock %}

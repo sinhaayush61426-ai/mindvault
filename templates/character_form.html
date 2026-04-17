@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}{% if character %}Edit Character{% else %}Create Character{% endif %} - MindVault{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container" style="max-width: 700px;">
+        <h1 class="section-title gradient-text">{% if character %}Edit Character{% else %}Create New Character{% endif %}</h1>
+
+        <div class="glass-panel form-card">
+            <form method="POST">
+                <div class="form-field">
+                    <label for="name">Character Name *</label>
+                    <input type="text" id="name" name="name" value="{{ character.name if character else '' }}" required placeholder="e.g., Aria Nightshade">
+                </div>
+
+                <div class="form-field">
+                    <label for="archetype">Archetype</label>
+                    <select id="archetype" name="archetype">
+                        <option value="Protagonist" {% if character and character.archetype == 'Protagonist' %}selected{% endif %}>Protagonist</option>
+                        <option value="Antagonist" {% if character and character.archetype == 'Antagonist' %}selected{% endif %}>Antagonist</option>
+                        <option value="Mentor" {% if character and character.archetype == 'Mentor' %}selected{% endif %}>Mentor</option>
+                        <option value="Support" {% if character and character.archetype == 'Support' %}selected{% endif %}>Support Character</option>
+                        <option value="Other" {% if character and character.archetype == 'Other' %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-field">
+                    <label for="personality_traits">Personality Traits</label>
+                    <textarea id="personality_traits" name="personality_traits" placeholder="e.g., Mysterious, Strategic, Loyal, Ambitious">{{ character.personality_traits if character else '' }}</textarea>
+                </div>
+
+                <div class="form-field">
+                    <label for="backstory">Backstory</label>
+                    <textarea id="backstory" name="backstory" placeholder="Character's history and origin...">{{ character.backstory if character else '' }}</textarea>
+                </div>
+
+                <div class="form-field">
+                    <label for="physical_description">Physical Description</label>
+                    <textarea id="physical_description" name="physical_description" placeholder="Height, build, features, clothing style...">{{ character.physical_description if character else '' }}</textarea>
+                </div>
+
+                <div class="form-field">
+                    <label for="motivations">Motivations & Goals</label>
+                    <textarea id="motivations" name="motivations" placeholder="What drives this character?">{{ character.motivations if character else '' }}</textarea>
+                </div>
+
+                <div class="form-field">
+                    <label for="relationships">Key Relationships</label>
+                    <textarea id="relationships" name="relationships" placeholder="How does this character relate to others? (JSON format: {&quot;character&quot;:&quot;relationship&quot;})">{{ character.relationships if character else '' }}</textarea>
+                </div>
+
+                <div class="form-field">
+                    <label for="avatar_color">Avatar Color</label>
+                    <input type="color" id="avatar_color" name="avatar_color" value="{{ character.avatar_color if character else '#5DADE2' }}" style="width: 60px; height: 40px; cursor: pointer;">
+                </div>
+
+                <div class="submit-block" style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">
+                        {% if character %}Update Character{% else %}Create Character{% endif %}
+                    </button>
+                    <a href="{{ url_for('characters') }}" class="btn btn-secondary" style="flex: 1; text-align: center; text-decoration: none;">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<style>
+    textarea {
+        font-family: 'Space Grotesk', monospace;
+        line-height: 1.6;
+    }
+</style>
+{% endblock %}

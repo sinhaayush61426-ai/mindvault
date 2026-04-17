@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}{{ entry.title }} - MindVault{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container" style="max-width: 900px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+            <h1 class="section-title gradient-text" style="margin: 0;">{{ entry.title }}</h1>
+            <div style="display: flex; gap: 1rem;">
+                <a href="{{ url_for('view_snapshots', entry_id=entry.id) }}" class="btn btn-secondary" style="text-decoration: none;">📸 Versions</a>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary" style="text-decoration: none;">Back</a>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+            <span class="badge">{{ entry.category }}</span>
+            <span class="badge variant-cyan">{{ entry.timestamp.strftime('%b %d, %Y') }}</span>
+        </div>
+
+        <div class="glass-panel form-card">
+            <div style="background: var(--bg-surface-alt); padding: 2rem; border-radius: 8px; margin-bottom: 2rem; min-height: 300px;">
+                <p style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: 'Space Grotesk', monospace; line-height: 1.8; color: var(--text-soft);">
+                    {{ content }}
+                </p>
+            </div>
+
+            <!-- Snapshot Creation Form -->
+            <form method="POST" action="{{ url_for('create_snapshot', entry_id=entry.id) }}" id="snapshot-form" style="background: var(--bg-surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                <h4 style="margin: 0 0 1rem 0; color: var(--clr-cyan); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Save as New Version</h4>
+                
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <input type="text" name="version" placeholder="Version (e.g., 1.1)" value="1.0" required style="flex: 1; min-width: 150px; background: var(--bg-surface-alt); border: 1px solid var(--border); color: var(--text-primary); padding: 0.75rem; border-radius: 6px;">
+                    
+                    <input type="text" name="description" placeholder="Description (optional)" style="flex: 1; min-width: 200px; background: var(--bg-surface-alt); border: 1px solid var(--border); color: var(--text-primary); padding: 0.75rem; border-radius: 6px;">
+                    
+                    <button type="submit" class="btn btn-primary" style="white-space: nowrap;">📸 Create Snapshot</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Zen Mode Toggle -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <button id="zen-toggle" type="button" class="btn btn-secondary" style="text-decoration: none;">🧘 Zen Mode</button>
+        </div>
+    </div>
+</section>
+
+<style>
+    input[type="text"] {
+        font-family: 'Space Grotesk', sans-serif;
+    }
+
+    input[type="text"]:focus {
+        outline: none;
+        border-color: var(--clr-cyan);
+        background: var(--bg-surface);
+        box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+    }
+
+    .badge.variant-cyan {
+        background: rgba(0, 242, 255, 0.12);
+        border-color: var(--clr-cyan);
+        color: var(--clr-cyan);
+    }
+</style>
+{% endblock %}

@@ -5,6 +5,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Outfit:wght@300;600;900&display=swap');
 
 :root {
+    /* --- COLORS --- */
     --bg-deep: #050608;
     --bg-surface: #0f111a;
     --bg-surface-alt: #141721;
@@ -12,9 +13,13 @@
     --bg-glow: rgba(0, 242, 255, 0.08);
 
     --clr-cyan: #00f2ff;
+    --clr-cyan-light: #5DADE2;
     --clr-violet: #7000ff;
+    --clr-violet-light: #DA70D6;
     --clr-pink: #ff007a;
+    --clr-pink-light: #FF69B4;
     --clr-gold: #ffc400;
+    --clr-gold-light: #ffdd57;
 
     --text-primary: #f0f0f0;
     --text-muted: #8a8f9d;
@@ -23,12 +28,43 @@
     --border: rgba(255, 255, 255, 0.08);
     --shadow: 0 28px 90px rgba(0, 0, 0, 0.2);
 
+    /* --- SPACING --- */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+
+    /* --- BORDER RADIUS --- */
     --radius-xl: 28px;
     --radius-lg: 22px;
     --radius-md: 14px;
     --radius-sm: 10px;
+
+    /* --- TRANSITIONS --- */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+
+    /* --- LAYOUT --- */
     --nav-height: 80px;
     --container-gap: 2rem;
+    --sidebar-width: 280px;
+
+    /* --- FONTS --- */
+    --font-primary: 'Space Grotesk', sans-serif;
+    --font-secondary: 'Outfit', sans-serif;
+    --font-weight-light: 300;
+    --font-weight-regular: 500;
+    --font-weight-bold: 700;
+    --font-weight-heavy: 900;
+
+    /* --- Z-INDEX --- */
+    --z-base: 1;
+    --z-dropdown: 100;
+    --z-fixed: 500;
+    --z-modal: 1000;
 }
 
 /* --- 1. GLOBAL RESET --- */

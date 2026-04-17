@@ -1,0 +1,89 @@
+{
+  "name": "MindVault - Secure Sanctuary",
+  "short_name": "MindVault",
+  "description": "A high-intensity workspace for secure reflections, professional research analysis, and creative fiction projects with zero-knowledge encryption.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#050608",
+  "theme_color": "#00f2ff",
+  "prefer_related_applications": false,
+  "categories": ["productivity", "utilities"],
+  "screenshots": [
+    {
+      "src": "/static/images/screenshot-192w.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/static/images/screenshot-512w.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/static/images/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/images/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/images/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Reflection",
+      "short_name": "New Entry",
+      "description": "Create a new secure entry in your vault",
+      "url": "/dashboard?action=new",
+      "icons": [
+        {
+          "src": "/static/images/edit-icon.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Character Matrix",
+      "short_name": "Characters",
+      "description": "Manage your character profiles",
+      "url": "/characters",
+      "icons": [
+        {
+          "src": "/static/images/character-icon.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "media",
+          "accept": ["image/*", "text/*"]
+        }
+      ]
+    }
+  }
+}

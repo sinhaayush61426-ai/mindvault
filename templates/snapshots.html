@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Entry Snapshots - MindVault{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container" style="max-width: 900px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h1 class="section-title gradient-text" style="margin: 0;">Version History</h1>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary" style="text-decoration: none;">Back to Vault</a>
+        </div>
+
+        <p class="section-copy" style="margin-bottom: 2rem;">
+            <strong>{{ entry.title }}</strong> - Manage snapshots and restore previous versions of your work.
+        </p>
+
+        {% if snapshots %}
+            <div class="version-timeline">
+                {% for snapshot in snapshots %}
+                    <div class="version-item">
+                        <div class="version-content">
+                            <div class="version-header">
+                                <div>
+                                    <div class="version-number">v{{ snapshot.version }}</div>
+                                    {% if snapshot.description %}
+                                        <div style="color: var(--text-soft); font-size: 0.9rem;">{{ snapshot.description }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="version-date">{{ snapshot.timestamp.strftime('%b %d, %Y • %I:%M %p') }}</div>
+                            </div>
+
+                            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                                <form method="POST" action="{{ url_for('restore_snapshot', snapshot_id=snapshot.id) }}" style="margin-top: 1rem;">
+                                    <button type="submit" class="btn btn-secondary" onclick="return confirm('Restore this version? Current version will be overwritten.')">
+                                        ↩️ Restore This Version
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="glass-panel form-card" style="text-align: center; padding: 3rem;">
+                <p class="section-copy">No snapshots created yet. Save a version of your entry to start tracking changes.</p>
+            </div>
+        {% endif %}
+
+        <!-- Current Version -->
+        <div style="margin-top: 3rem;">
+            <h3 class="section-title" style="font-size: 1.4rem; margin-bottom: 1.5rem;">Current Version</h3>
+            <div class="glass-panel form-card">
+                <div style="background: var(--bg-surface-alt); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <p style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: 'Space Grotesk', monospace; font-size: 0.95rem;">
+                        [Current content encrypted and secured]
+                    </p>
+                </div>
+
+                <form method="POST" action="{{ url_for('create_snapshot', entry_id=entry.id) }}" id="snapshot-form">
+                    <div class="form-field">
+                        <label for="version-input">Snapshot Version</label>
+                        <input type="text" id="version-input" name="version" placeholder="e.g., 1.1, 2.0" value="1.0" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="description-input">Description (Optional)</label>
+                        <input type="text" id="description-input" name="description" placeholder="e.g., Fixed chapter 3, minor edits">
+                    </div>
+
+                    <div class="submit-block">
+                        <button type="submit" class="btn btn-primary">📸 Create Snapshot</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .version-timeline {
+        position: relative;
+        padding: 1rem 0;
+    }
+
+    .version-timeline::before {
+        content: '';
+        position: absolute;
+        left: 1.5rem;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(180deg, var(--clr-cyan), var(--clr-violet), var(--clr-pink));
+    }
+
+    .version-item {
+        margin-bottom: 2rem;
+        margin-left: 2rem;
+        position: relative;
+    }
+
+    .version-item::before {
+        content: '';
+        position: absolute;
+        left: -2.3rem;
+        top: 0.6rem;
+        width: 1.2rem;
+        height: 1.2rem;
+        background: var(--bg-surface);
+        border: 2px solid var(--clr-cyan);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .version-item:hover::before {
+        background: var(--clr-cyan);
+        box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+    }
+
+    .version-content {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1.5rem;
+    }
+
+    .version-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+    }
+
+    .version-number {
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--clr-cyan);
+    }
+
+    .version-date {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+    }
+</style>
+{% endblock %}
