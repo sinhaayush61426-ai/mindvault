@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Home - MindVault{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>MIND <span class="gradient-text">VAULT</span></h1>
+    <p class="section-copy">A high-intensity workspace for secure reflections and professional research analysis.</p>
+    <div class="btn-group">
+        <a href="{{ url_for('login') }}" class="btn btn-primary">Enter Sanctuary</a>
+        <a href="{{ url_for('register') }}" class="btn btn-secondary">Initialize Account</a>
+    </div>
+</section>
+
+<section class="section section-features">
+    <div class="container">
+        <div class="grid">
+            <article class="card">
+                <div class="icon-container">🔒</div>
+                <h3>Zero-Knowledge AES</h3>
+                <p>No filler. Just raw, hardware-level encryption for your most sensitive data.</p>
+            </article>
+
+            <article class="card">
+                <div class="icon-container">🧠</div>
+                <h3>Research Categorization</h3>
+                <p>Separate your fiction novellas from institutional analysis projects with ease.</p>
+            </article>
+
+            <article class="card">
+                <div class="icon-container">✍️</div>
+                <h3>Author Tools</h3>
+                <p>Real-time word counts and milestone tracking for serious creative projects.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2 class="section-title">Testimonials</h2>
+        <div class="grid">
+            {% for review in reviews %}
+            <article class="card">
+                <p>"{{ review.content }}"</p>
+                <div class="chip">{{ review.author_name }}</div>
+                <p class="text-muted">{{ review.occupation }}</p>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

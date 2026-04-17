@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Register - MindVault{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="glass-panel form-card">
+            <h2 class="section-title gradient-text">Initialize New Vault</h2>
+            <p class="section-copy">Create your secure account and begin storing locked knowledge.</p>
+            <form method="POST">
+                <div class="form-field">
+                    <label for="username">Identifier</label>
+                    <input id="username" type="text" name="username" placeholder="Username" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="email">Contact Email</label>
+                    <input id="email" type="email" name="email" placeholder="email@example.com" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="password">Access Key</label>
+                    <input id="password" type="password" name="password" placeholder="••••••••" required>
+                </div>
+
+                <div class="submit-block">
+                    <button type="submit" class="btn btn-primary">Create Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

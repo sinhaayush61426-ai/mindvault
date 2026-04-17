@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Submit Review - MindVault{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="glass-panel form-card">
+            <h2 class="section-title gradient-text">Public Testimony</h2>
+            <p class="section-copy">Share your experience with the Vault and help others discover the sanctuary.</p>
+            <form method="POST">
+                <div class="form-field">
+                    <label for="author_name">Full Name</label>
+                    <input id="author_name" type="text" name="author_name" placeholder="Full Name" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="occupation">Job Title</label>
+                    <input id="occupation" type="text" name="occupation" placeholder="Job Title">
+                </div>
+
+                <div class="form-field">
+                    <label for="content">Share your experience</label>
+                    <textarea id="content" name="content" placeholder="Share your experience..." rows="4" required></textarea>
+                </div>
+
+                <div class="submit-block">
+                    <button type="submit" class="btn btn-primary">Post Review</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

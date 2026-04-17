@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Login - MindVault{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="glass-panel form-card">
+            <h2 class="section-title gradient-text">Unlock Vault</h2>
+            <p class="section-copy">Authenticate with your secure account and return to the sanctuary.</p>
+            <form method="POST">
+                <div class="form-field">
+                    <label for="email">Registered Email</label>
+                    <input id="email" type="email" name="email" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="password">Vault Password</label>
+                    <input id="password" type="password" name="password" required>
+                </div>
+
+                <div class="submit-block">
+                    <button type="submit" class="btn btn-primary">Authenticate</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
