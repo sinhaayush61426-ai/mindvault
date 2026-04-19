@@ -1,6 +1,70 @@
 /* MindVault Expansion Features - CSS
-   Zen Mode, Character Matrix, Versioning UI
+   Zen Mode, Character Matrix, Versioning UI, Icon Styling
 */
+
+/* --- SVG ICON STYLING --- */
+.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1em;
+    height: 1em;
+    color: inherit;
+    vertical-align: -0.125em;
+}
+
+.icon-sm {
+    width: 0.875em;
+    height: 0.875em;
+}
+
+.icon-md {
+    width: 1.25em;
+    height: 1.25em;
+}
+
+.icon-lg {
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.icon-xl {
+    width: 2em;
+    height: 2em;
+}
+
+.icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.icon-inline {
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    color: var(--text-primary);
+}
+
+.icon-button:hover {
+    background: rgba(0, 242, 255, 0.1);
+    color: var(--clr-cyan);
+}
+
+.icon-button:active {
+    transform: scale(0.95);
+}
 
 /* --- ZEN MODE (FOCUS MODE) --- */
 .zen-mode {
@@ -403,6 +467,33 @@
     resize: vertical;
     min-height: 150px;
     font-family: var(--font-primary);
+}
+
+/* Custom select styling */
+.custom-select {
+    position: relative;
+}
+
+.custom-select select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    padding-right: 2.5rem;
+}
+
+.custom-select::after {
+    content: '';
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 0.375rem solid transparent;
+    border-right: 0.375rem solid transparent;
+    border-top: 0.375rem solid var(--text-primary);
+    pointer-events: none;
 }
 
 /* --- BADGE & TAGS --- */

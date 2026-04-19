@@ -14,15 +14,60 @@
 </head>
 <body>
     <nav>
-        <a href="/" class="logo">MindVault</a>
+        <a href="/" class="logo" style="display: flex; align-items: center; gap: 0.7rem;">
+            <svg style="width: 1.8rem; height: 1.8rem; fill: none; stroke: url(#grad); stroke-width: 2;" viewBox="0 0 24 24">
+                <defs>
+                    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#00f2ff;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#7000ff;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            MindVault
+        </a>
         <div class="nav-links">
             {% if current_user.is_authenticated %}
-                <a href="{{ url_for('dashboard') }}">Vault</a>
-                <a href="{{ url_for('characters') }}">Characters</a>
-                <a href="{{ url_for('logout') }}">Logout</a>
+                <a href="{{ url_for('dashboard') }}" class="nav-link">
+                    <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    Vault
+                </a>
+                <a href="{{ url_for('characters') }}" class="nav-link">
+                    <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    Characters
+                </a>
+                <a href="{{ url_for('logout') }}" class="nav-link logout-link">
+                    <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Logout
+                </a>
             {% else %}
-                <a href="{{ url_for('login') }}" class="login-link">Login</a>
-                <a href="{{ url_for('register') }}" class="register-link">Register</a>
+                <a href="{{ url_for('login') }}" class="login-link nav-link">
+                    <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Login
+                </a>
+                <a href="{{ url_for('register') }}" class="register-link nav-link">
+                    <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Register
+                </a>
             {% endif %}
         </div>
     </nav>

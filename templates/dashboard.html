@@ -7,28 +7,37 @@
     <aside class="pane pane-left">
         <div class="glass-panel" style="padding: 2rem; margin: 1.5rem;">
             <h4 class="text-highlight" style="margin-bottom: 1.5rem; letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem;">Vault Archive</h4>
-            {% for entry in entries %}
-            <article class="card" style="margin-bottom: 1rem;">
-                <small class="text-muted">{{ entry.category | default('General') }}</small>
-                <div style="margin-top: 0.6rem; font-weight: 700;">{{ entry.title }}</div>
-            </article>
-            {% endfor %}
+            {% if entries %}
+                {% for entry in entries %}
+                <a href="{{ url_for('view_entry', entry_id=entry.id) }}" style="text-decoration: none; color: inherit;">
+                    <article class="card" style="margin-bottom: 1rem; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(0, 242, 255, 0.05)'" onmouseout="this.style.background='transparent'">
+                        <small class="text-muted">{{ entry.category | default('General') }}</small>
+                        <div style="margin-top: 0.6rem; font-weight: 700; color: var(--clr-cyan);">{{ entry.title }}</div>
+                    </article>
+                </a>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted" style="font-size: 0.9rem;">No entries yet. Start writing in the form.</p>
+            {% endif %}
         </div>
     </aside>
 
     <main class="pane pane-center">
         <div class="glass-panel form-card">
-            <form action="/save-entry" method="POST">
+            <form action="{{ url_for('seal_letter') }}" method="POST">
                 <div class="form-field">
                     <input type="text" name="title" placeholder="Project Title..." style="background: transparent; border: none; color: #fff; font-size: 2.5rem; font-weight: 900; width: 100%; outline: none;" required>
                 </div>
 
                 <div class="form-field">
-                    <select name="category">
-                        <option value="General">General</option>
-                        <option value="Novella">Novella/Fiction</option>
-                        <option value="Research">Science Research</option>
-                    </select>
+                    <label for="category">Category</label>
+                    <div class="custom-select">
+                        <select name="category" id="category">
+                            <option value="General">General</option>
+                            <option value="Novella">Novella/Fiction</option>
+                            <option value="Research">Science Research</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-field">
@@ -36,7 +45,12 @@
                 </div>
 
                 <div class="submit-block">
-                    <button type="submit" class="btn btn-primary">Seal Entry</button>
+                    <button type="submit" class="btn btn-primary">
+                        <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"></path>
+                        </svg>
+                        Seal Entry
+                    </button>
                 </div>
             </form>
         </div>
@@ -44,33 +58,13 @@
 
     <aside class="pane pane-right">
         <div class="glass-panel" style="padding: 2rem; margin: 1.5rem;">
-            <h5 class="text-highlight" style="margin-bottom: 1rem; letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem;">Clarity Metrics</h5>
-            <canvas id="clarityChart" width="100%" height="150"></canvas>
+            <h5 class="text-highlight" style="margin-bottom: 1rem; letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem;">Recent Activity</h5>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Your vault is secure and growing.</p>
         </div>
     </aside>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('clarityChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['M', 'T', 'W', 'T', 'F'],
-            datasets: [{
-                data: [60, 80, 45, 90, 70],
-                borderColor: '#00f2ff',
-                tension: 0.4,
-                pointRadius: 0,
-                borderWidth: 2
-            }]
-        },
-        options: {
-            plugins: { legend: { display: false } },
-            scales: { x: { display: false }, y: { display: false } },
-            responsive: true,
-            maintainAspectRatio: false
-        }
-    });
+    // Any additional dashboard scripts can go here
 </script>
 {% endblock %}

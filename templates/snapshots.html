@@ -7,7 +7,12 @@
     <div class="container" style="max-width: 900px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
             <h1 class="section-title gradient-text" style="margin: 0;">Version History</h1>
-            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary" style="text-decoration: none;">Back to Vault</a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary" style="text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"></path>
+                </svg>
+                Back to Vault
+            </a>
         </div>
 
         <p class="section-copy" style="margin-bottom: 2rem;">
@@ -32,7 +37,11 @@
                             <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
                                 <form method="POST" action="{{ url_for('restore_snapshot', snapshot_id=snapshot.id) }}" style="margin-top: 1rem;">
                                     <button type="submit" class="btn btn-secondary" onclick="return confirm('Restore this version? Current version will be overwritten.')">
-                                        ↩️ Restore This Version
+                                        <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="23 4 23 10 17 10"></polyline>
+                                            <path d="M20.49 15a9 9 0 1 1-2-8.83"></path>
+                                        </svg>
+                                        Restore This Version
                                     </button>
                                 </form>
                             </div>
@@ -68,7 +77,13 @@
                     </div>
 
                     <div class="submit-block">
-                        <button type="submit" class="btn btn-primary">📸 Create Snapshot</button>
+                        <button type="submit" class="btn btn-primary">
+                            <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                <circle cx="12" cy="13" r="4"></circle>
+                            </svg>
+                            Create Snapshot
+                        </button>
                     </div>
                 </form>
             </div>

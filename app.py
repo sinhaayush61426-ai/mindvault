@@ -4,12 +4,13 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from flask_bcrypt import Bcrypt
 from cryptography.fernet import Fernet
 from datetime import datetime
+from urllib.parse import urlparse, urljoin
 
 app = Flask(__name__)
 
 # --- CONFIG ---
 app.config['SECRET_KEY'] = 'mindvault_pro_ultra_secure_999'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mindvault.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -74,6 +75,11 @@ class EntrySnapshot(db.Model):
     is_autosave = db.Column(db.Boolean, default=False)
     entry = db.relationship('DiaryEntry', backref='snapshots')
 
+def is_safe_url(target):
+    host_url = urlparse(request.host_url)
+    redirect_url = urlparse(urljoin(request.host_url, target))
+    return redirect_url.scheme in ('http', 'https') and host_url.netloc == redirect_url.netloc
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -82,20 +88,51 @@ def load_user(user_id):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        hashed_pw = bcrypt.generate_password_hash(request.form.get('password')).decode('utf-8')
-        user = User(username=request.form.get('username'), email=request.form.get('email'), password_hash=hashed_pw)
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        # Check if username already exists
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            flash('Username already exists. Please choose a different one.', 'error')
+            return redirect(url_for('register'))
+        
+        # Check if email already exists
+        existing_email = User.query.filter_by(email=email).first()
+        if existing_email:
+            flash('Email already exists. Please use a different email.', 'error')
+            return redirect(url_for('register'))
+        
+        hashed_pw = bcrypt.generate_password_hash(password).decode('utf-8')
+        user = User(username=username, email=email, password_hash=hashed_pw)
         db.session.add(user)
         db.session.commit()
+        flash('Account created successfully! Please log in.', 'success')
         return redirect(url_for('login'))
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+
     if request.method == 'POST':
-        user = User.query.filter_by(email=request.form.get('email')).first()
-        if user and bcrypt.check_password_hash(user.password_hash, request.form.get('password')):
+        email = request.form.get('email')
+        password = request.form.get('password')
+        user = User.query.filter_by(email=email).first()
+
+        if user and bcrypt.check_password_hash(user.password_hash, password):
             login_user(user)
-            return redirect(url_for('dashboard'))
+            next_page = request.args.get('next')
+            if not next_page or not is_safe_url(next_page):
+                next_page = url_for('dashboard')
+            flash('Welcome back! Redirecting you to your vault…', 'success')
+            return redirect(next_page)
+
+        flash('Invalid email or password. Please try again.', 'error')
+        return redirect(url_for('login'))
+
     return render_template('login.html')
 
 @app.route('/logout')
