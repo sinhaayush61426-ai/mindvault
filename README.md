@@ -553,19 +553,49 @@ MindVault is more than a diary: it is a personal vault for self-reflection, emot
 
 ## Contributing
 
-Contributions are welcome. If you want to help make MindVault stronger, please:
+Contributions are welcome to MindVault. If you want to help strengthen the project, please:
 
-- Open issues for bugs or new feature ideas
-- Submit pull requests with clean, documented code
-- Keep security and privacy at the center of every enhancement
+1. **Review the guidelines** - Read [Workspace Instructions](.github/copilot-instructions.md) for development conventions
+2. **Open an issue** - Describe the bug or feature before starting work
+3. **Submit a pull request** - Include clear commits and reference the issue
+4. **Maintain security** - Always encrypt sensitive data; never store plaintext
 
-### Good contribution ideas
+### Suggested Contribution Areas
 
-- Add local NLP sentiment scoring
-- Implement graph-based emotional dashboards
-- Expand the entry model with tags, mood labels, and prompts
-- Build time-locked letters and future notes
-- Improve authentication, encryption, and key storage
+**Development tasks:**
+- Add full-text search with encrypted index
+- Implement local NLP sentiment scoring
+- Build emotion trend visualizations and heatmaps
+- Create time-locked letters with release scheduling
+- Develop secure export/import with encrypted archives
+- Add advanced authentication (2FA, recovery keys)
+
+**Testing & QA:**
+- Write unit tests for encryption, authentication, and routes
+- Test PWA functionality on different devices and browsers
+- Verify offline sync works correctly
+- Test across different screen sizes
+
+**Documentation:**
+- Expand EXPANSION.md with use cases
+- Add troubleshooting guides
+- Create video tutorials
+- Document API endpoints formally
+
+**Design & UX:**
+- Design 2FA flow or recovery key UI
+- Improve character matrix UX
+- Build emotion trend dashboard mockups
+- Design time-locked letter calendar view
+
+### Code Standards
+
+- **Follow conventions** in [Workspace Instructions](.github/copilot-instructions.md)
+- **Encrypt all sensitive data** before storage—no exceptions
+- **Use Python 3.11+** and modern JavaScript (no IE support needed)
+- **Test manually** before submitting PR
+- **Keep pull requests focused** on one feature or fix
+- **Write clear commit messages** describing the change
 
 ## License
 
