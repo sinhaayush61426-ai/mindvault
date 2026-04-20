@@ -140,6 +140,22 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
+# --- REVIEW SUBMISSION ROUTE ---
+@app.route('/submit-review', methods=['GET', 'POST'])
+def submit_review():
+    if request.method == 'POST':
+        review = Review(
+            author_name=request.form.get('author_name'),
+            occupation=request.form.get('occupation'),
+            content=request.form.get('content'),
+            is_approved=False  # Admin approval before display
+        )
+        db.session.add(review)
+        db.session.commit()
+        flash('Thank you! Your review will be displayed after moderation.', 'success')
+        return redirect(url_for('home'))
+    return render_template('submit_review.html')
+
 # --- APP ROUTES ---
 @app.route('/')
 def home():

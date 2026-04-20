@@ -50,4 +50,20 @@
         </div>
     </div>
 </section>
+
+<section class="section" style="text-align: center; background: rgba(0, 242, 255, 0.05); padding: 3rem 0;">
+    <div class="container">
+        <h3 class="section-title" style="margin-bottom: 1.5rem;">Share Your Experience</h3>
+        <p class="section-copy" style="margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+            Help other writers and researchers discover MindVault. Share your experience and testimonial.
+        </p>
+        <a href="{{ url_for('submit_review') }}" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
+            <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <polyline points="16.5 1.5 20 5 16 9"></polyline>
+            </svg>
+            Submit Your Review
+        </a>
+    </div>
+</section>
 {% endblock %}
