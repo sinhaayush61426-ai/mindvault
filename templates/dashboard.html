@@ -3,197 +3,68 @@
 {% block title %}Dashboard - MindVault{% endblock %}
 
 {% block content %}
-<div class="minimal-dashboard">
-    <!-- Quick Writing Area (Primary Focus) -->
-    <div class="writing-section">
-        <div class="glass-panel form-card minimal-form">
-            <form action="{{ url_for('seal_letter') }}" method="POST" id="entry-form">
-                <!-- Title Input -->
-                <div class="form-field minimal-field">
-                    <input 
-                        type="text" 
-                        name="title" 
-                        placeholder="Title..." 
-                        class="minimal-title-input" 
-                        minlength="3"
-                        maxlength="100"
-                        required
-                    >
+<div class="vault-layout">
+    <aside class="pane pane-left">
+        <div class="glass-panel" style="padding: 2rem; margin: 1.5rem;">
+            <h4 class="text-highlight" style="margin-bottom: 1.5rem; letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem;">Vault Archive</h4>
+            {% if entries %}
+                {% for entry in entries %}
+                <a href="{{ url_for('view_entry', entry_id=entry.id) }}" style="text-decoration: none; color: inherit;">
+                    <article class="card" style="margin-bottom: 1rem; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(0, 242, 255, 0.05)'" onmouseout="this.style.background='transparent'">
+                        <small class="text-muted">{{ entry.category | default('General') }}</small>
+                        <div style="margin-top: 0.6rem; font-weight: 700; color: var(--clr-cyan);">{{ entry.title }}</div>
+                    </article>
+                </a>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted" style="font-size: 0.9rem;">No entries yet. Start writing in the form.</p>
+            {% endif %}
+        </div>
+    </aside>
+
+    <main class="pane pane-center">
+        <div class="glass-panel form-card">
+            <form action="{{ url_for('seal_letter') }}" method="POST">
+                <div class="form-field">
+                    <input type="text" name="title" placeholder="Project Title..." style="background: transparent; border: none; color: #fff; font-size: 2.5rem; font-weight: 900; width: 100%; outline: none;" required>
                 </div>
 
-                <!-- Category Selector (Compact) -->
-                <div class="form-field minimal-field compact-selector">
-                    <select name="category" id="category" class="minimal-select">
-                        <option value="General">✎ General</option>
-                        <option value="Novella">✍ Novella/Fiction</option>
-                        <option value="Research">🔬 Research</option>
-                    </select>
-                    <span class="category-indicator"></span>
-                </div>
-
-                <!-- Main Writing Area -->
-                <div class="form-field minimal-field textarea-wrapper">
-                    <textarea 
-                        name="content" 
-                        placeholder="Start writing..." 
-                        class="minimal-textarea"
-                        minlength="10"
-                        spellcheck="true"
-                        required
-                    ></textarea>
-                    <div class="word-counter-minimal">
-                        <span id="word-count">0</span>w · <span id="char-count">0</span>c
+                <div class="form-field">
+                    <label for="category">Category</label>
+                    <div class="custom-select">
+                        <select name="category" id="category">
+                            <option value="General">General</option>
+                            <option value="Novella">Novella/Fiction</option>
+                            <option value="Research">Science Research</option>
+                        </select>
                     </div>
                 </div>
 
-                <!-- Action Bar (Minimal) -->
-                <div class="submit-block minimal-actions">
-                    <button type="submit" class="btn btn-primary minimal-save-btn">
+                <div class="form-field">
+                    <textarea name="content" placeholder="Start writing..."></textarea>
+                </div>
+
+                <div class="submit-block">
+                    <button type="submit" class="btn btn-primary">
                         <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M19 12H5M12 19l-7-7 7-7"></path>
                         </svg>
-                        Save Entry
+                        Seal Entry
                     </button>
-                    <span class="autosave-indicator" id="autosave-status"></span>
                 </div>
             </form>
         </div>
-    </div>
+    </main>
 
-    <!-- Vault Archive Sidebar (Toggleable) -->
-    <div class="vault-sidebar">
-        <button class="sidebar-toggle" id="sidebar-toggle">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-            <span>Vault</span>
-        </button>
-        
-        <div class="sidebar-panel glass-panel" id="vault-panel">
-            <h4 class="sidebar-title">Your Entries</h4>
-            
-            {% if entries %}
-            <div class="vault-list">
-                {% for entry in entries %}
-                <a href="{{ url_for('view_entry', entry_id=entry.id) }}" class="vault-item">
-                    <div class="vault-item-header">
-                        <div class="vault-item-title">{{ entry.title }}</div>
-                        <span class="vault-item-category">{{ entry.category | default('General') }}</span>
-                    </div>
-                    <div class="vault-item-date">{{ entry.timestamp.strftime('%b %d') }}</div>
-                </a>
-                {% endfor %}
-            </div>
-            {% else %}
-            <p class="text-muted" style="font-size: 0.9rem; text-align: center; padding: 2rem 1rem;">
-                No entries yet. Create your first entry to get started.
-            </p>
-            {% endif %}
+    <aside class="pane pane-right">
+        <div class="glass-panel" style="padding: 2rem; margin: 1.5rem;">
+            <h5 class="text-highlight" style="margin-bottom: 1rem; letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem;">Recent Activity</h5>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Your vault is secure and growing.</p>
         </div>
-    </div>
+    </aside>
 </div>
 
 <script>
-    // Initialize word/character counter
-    function initializeCounters() {
-        const textarea = document.querySelector('.minimal-textarea');
-        const wordCount = document.getElementById('word-count');
-        const charCount = document.getElementById('char-count');
-        
-        if (!textarea) return;
-        
-        function updateCounts() {
-            const text = textarea.value.trim();
-            const words = text === '' ? 0 : text.split(/\s+/).length;
-            const chars = text.length;
-            
-            if (wordCount) wordCount.textContent = words;
-            if (charCount) charCount.textContent = chars;
-        }
-        
-        textarea.addEventListener('input', updateCounts);
-    }
-
-    // Initialize sidebar toggle
-    function initializeSidebar() {
-        const toggle = document.getElementById('sidebar-toggle');
-        const panel = document.getElementById('vault-panel');
-        
-        if (toggle && panel) {
-            toggle.addEventListener('click', () => {
-                panel.classList.toggle('hidden');
-            });
-            
-            // Load sidebar state from localStorage
-            if (localStorage.getItem('sidebarHidden') === 'true') {
-                panel.classList.add('hidden');
-            }
-        }
-    }
-
-    // Initialize autosave indicator
-    function initializeAutoSave() {
-        const textarea = document.querySelector('.minimal-textarea');
-        const indicator = document.getElementById('autosave-status');
-        let saveTimeout;
-        
-        if (textarea && indicator) {
-            // Only listen to textarea changes, not entire form
-            textarea.addEventListener('input', () => {
-                clearTimeout(saveTimeout);
-                
-                indicator.textContent = 'Saving...';
-                indicator.classList.add('active');
-                
-                saveTimeout = setTimeout(() => {
-                    indicator.textContent = 'Saved';
-                    setTimeout(() => {
-                        indicator.classList.remove('active');
-                    }, 2000);
-                }, 1000);
-            });
-        }
-    }
-
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', () => {
-        initializeCounters();
-        initializeSidebar();
-        initializeAutoSave();
-        initializeFormValidation();
-    });
-
-    // Form validation to prevent whitespace-only submissions
-    function initializeFormValidation() {
-        const form = document.getElementById('entry-form');
-        if (!form) return;
-        
-        form.addEventListener('submit', (e) => {
-            const titleInput = form.querySelector('[name="title"]');
-            const contentInput = form.querySelector('[name="content"]');
-            
-            // Trim and validate title
-            if (titleInput) {
-                titleInput.value = titleInput.value.trim();
-                if (titleInput.value.length < 3) {
-                    e.preventDefault();
-                    alert('Title must be at least 3 characters');
-                    return false;
-                }
-            }
-            
-            // Trim and validate content
-            if (contentInput) {
-                contentInput.value = contentInput.value.trim();
-                if (contentInput.value.length < 10) {
-                    e.preventDefault();
-                    alert('Content must be at least 10 characters');
-                    return false;
-                }
-            }
-        });
-    }
+    // Any additional dashboard scripts can go here
 </script>
 {% endblock %}
