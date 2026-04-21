@@ -1,6 +1,6 @@
 
 <div align="center">
-  <img src="static/logo_mindvault.png" alt="MindVault Logo" width="120" height="120" />
+  <img src="static/IMG_MindVault_logo.png" alt="MindVault Logo" width="120" height="120" />
 </div>
 
 # MindVault v2.0
