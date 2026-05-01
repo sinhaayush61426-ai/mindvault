@@ -527,3 +527,237 @@
     border-color: var(--clr-pink);
     color: var(--clr-pink);
 }
+
+/* --- PROFESSIONAL FOOTER --- */
+.mindvault-footer {
+    background: #0a0a0a;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: var(--spacing-2xl) 0;
+    margin-top: auto;
+}
+
+.footer-container {
+    width: min(1200px, calc(100% - 4rem));
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-2xl);
+}
+
+.footer-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+}
+
+/* Left Section: Logo & Branding */
+.footer-branding {
+    gap: var(--spacing-lg);
+    justify-content: flex-start;
+}
+
+.footer-logo-container {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(0, 242, 255, 0.12), rgba(112, 0, 255, 0.12));
+    border: 1px solid rgba(0, 242, 255, 0.24);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.footer-logo {
+    width: 28px;
+    height: 28px;
+    color: #e0e0e0;
+}
+
+.footer-brand-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-brand-name {
+    font-family: var(--font-secondary);
+    font-size: 1.1rem;
+    font-weight: var(--font-weight-bold);
+    color: #e0e0e0;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.footer-tagline {
+    font-size: 0.75rem;
+    color: #888;
+    margin: var(--spacing-xs) 0 0 0;
+    line-height: 1.3;
+}
+
+/* Center Section: Features */
+.footer-features {
+    justify-content: center;
+    flex-direction: column;
+}
+
+.footer-features-text {
+    font-size: 0.9rem;
+    color: #e0e0e0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    justify-content: center;
+    align-items: center;
+}
+
+.feature-item {
+    white-space: nowrap;
+}
+
+.separator {
+    color: #888;
+    opacity: 0.5;
+}
+
+/* Right Section: Copyright */
+.footer-copyright {
+    justify-content: flex-end;
+}
+
+.copyright-text {
+    font-size: 0.85rem;
+    color: #888;
+    margin: 0;
+    white-space: nowrap;
+}
+
+/* Footer Divider */
+.footer-divider {
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* --- FOOTER RESPONSIVE DESIGN --- */
+@media (max-width: 1024px) {
+    .footer-container {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--spacing-xl);
+        text-align: center;
+    }
+
+    .footer-section {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .footer-branding {
+        justify-content: center;
+    }
+
+    .footer-features-text {
+        justify-content: center;
+        gap: var(--spacing-md);
+    }
+
+    .footer-copyright {
+        justify-content: center;
+    }
+
+    .copyright-text {
+        white-space: normal;
+    }
+}
+
+@media (max-width: 768px) {
+    .mindvault-footer {
+        padding: var(--spacing-xl) 0;
+    }
+
+    .footer-container {
+        width: calc(100% - 2rem);
+        gap: var(--spacing-lg);
+    }
+
+    .footer-section {
+        flex: 1 1 100%;
+    }
+
+    .footer-branding {
+        justify-content: center;
+        align-items: center;
+    }
+
+    .footer-brand-name {
+        font-size: 1rem;
+    }
+
+    .footer-tagline {
+        font-size: 0.7rem;
+    }
+
+    .footer-features-text {
+        font-size: 0.8rem;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .separator {
+        display: none;
+    }
+
+    .separator:nth-child(2) {
+        display: inline;
+    }
+
+    .separator:nth-child(4) {
+        display: inline;
+    }
+
+    .copyright-text {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .mindvault-footer {
+        padding: var(--spacing-lg) 0;
+    }
+
+    .footer-container {
+        width: calc(100% - 1.5rem);
+        gap: var(--spacing-md);
+    }
+
+    .footer-logo-container {
+        width: 48px;
+        height: 48px;
+    }
+
+    .footer-logo {
+        width: 24px;
+        height: 24px;
+    }
+
+    .footer-brand-name {
+        font-size: 0.95rem;
+    }
+
+    .footer-tagline {
+        font-size: 0.65rem;
+    }
+
+    .footer-features-text {
+        font-size: 0.75rem;
+    }
+
+    .copyright-text {
+        font-size: 0.7rem;
+    }
+}
