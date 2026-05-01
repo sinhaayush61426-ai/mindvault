@@ -87,6 +87,9 @@ def load_user(user_id):
 # --- AUTH ROUTES (Crucial to fix your BuildError) ---
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+    
     if request.method == 'POST':
         username = request.form.get('username')
         email = request.form.get('email')
@@ -143,6 +146,9 @@ def logout():
 # --- REVIEW SUBMISSION ROUTE ---
 @app.route('/submit-review', methods=['GET', 'POST'])
 def submit_review():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+    
     if request.method == 'POST':
         review = Review(
             author_name=request.form.get('author_name'),
@@ -159,6 +165,9 @@ def submit_review():
 # --- APP ROUTES ---
 @app.route('/')
 def home():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+    
     reviews = Review.query.filter_by(is_approved=True).order_by(Review.timestamp.desc()).limit(3).all()
     return render_template('index.html', reviews=reviews)
 
