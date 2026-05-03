@@ -3,134 +3,90 @@
 {% block title %}{{ entry.title }} - MindVault{% endblock %}
 
 {% block content %}
-<div class="entry-view-minimal">
-    <!-- Header with Controls -->
-    <div class="entry-header-minimal">
-        <div class="entry-header-left">
-            <h1 class="entry-title-minimal">{{ entry.title }}</h1>
-            <div class="entry-meta">
-                <span class="meta-item">{{ entry.category }}</span>
-                <span class="meta-separator">•</span>
-                <span class="meta-item">{{ entry.timestamp.strftime('%b %d, %Y') }}</span>
+<section class="section">
+    <div class="container" style="max-width: 900px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+            <h1 class="section-title gradient-text" style="margin: 0;">{{ entry.title }}</h1>
+            <div style="display: flex; gap: 1rem;">
+                <a href="{{ url_for('view_snapshots', entry_id=entry.id) }}" class="btn btn-secondary" style="text-decoration: none;">
+                    <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                    Versions
+                </a>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary" style="text-decoration: none;">
+                    <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"></path>
+                    </svg>
+                    Back
+                </a>
             </div>
         </div>
-        <div class="entry-header-right">
-            <a href="{{ url_for('view_snapshots', entry_id=entry.id) }}" class="btn-icon-minimal" title="View versions">
-                <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                    <circle cx="12" cy="13" r="4"></circle>
-                </svg>
-            </a>
-            <button id="zen-toggle" class="btn-icon-minimal" title="Focus mode">
-                <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+        <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+            <span class="badge">{{ entry.category }}</span>
+            <span class="badge variant-cyan">{{ entry.timestamp.strftime('%b %d, %Y') }}</span>
+        </div>
+
+        <div class="glass-panel form-card">
+            <div style="background: var(--bg-surface-alt); padding: 2rem; border-radius: 8px; margin-bottom: 2rem; min-height: 300px;">
+                <p style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: 'Space Grotesk', monospace; line-height: 1.8; color: var(--text-soft);">
+                    {{ content }}
+                </p>
+            </div>
+
+            <!-- Snapshot Creation Form -->
+            <form method="POST" action="{{ url_for('create_snapshot', entry_id=entry.id) }}" id="snapshot-form" style="background: var(--bg-surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                <h4 style="margin: 0 0 1rem 0; color: var(--clr-cyan); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Save as New Version</h4>
+                
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <input type="text" name="version" placeholder="Version (e.g., 1.1)" value="1.0" required style="flex: 1; min-width: 150px; background: var(--bg-surface-alt); border: 1px solid var(--border); color: var(--text-primary); padding: 0.75rem; border-radius: 6px;">
+                    
+                    <input type="text" name="description" placeholder="Description (optional)" style="flex: 1; min-width: 200px; background: var(--bg-surface-alt); border: 1px solid var(--border); color: var(--text-primary); padding: 0.75rem; border-radius: 6px;">
+                    
+                    <button type="submit" class="btn btn-primary" style="white-space: nowrap;">
+                        <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                            <circle cx="12" cy="13" r="4"></circle>
+                        </svg>
+                        Create Snapshot
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Zen Mode Toggle -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <button id="zen-toggle" type="button" class="btn btn-secondary" style="text-decoration: none;">
+                <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="10"></circle>
                     <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
                     <line x1="9" y1="9" x2="9.01" y2="9"></line>
                     <line x1="15" y1="9" x2="15.01" y2="9"></line>
                 </svg>
+                Zen Mode
             </button>
-            <a href="{{ url_for('dashboard') }}" class="btn-icon-minimal" title="Back to dashboard">
-                <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M19 12H5M12 19l-7-7 7-7"></path>
-                </svg>
-            </a>
         </div>
     </div>
+</section>
 
-    <!-- Main Content Area -->
-    <div class="entry-content-minimal">
-        <div class="glass-panel content-panel">
-            <div class="entry-text">
-                {{ content }}
-            </div>
-        </div>
-    </div>
-
-    <!-- Snapshot Creation Section (Minimal) -->
-    <div class="snapshot-section-minimal">
-        <form method="POST" action="{{ url_for('create_snapshot', entry_id=entry.id) }}" class="snapshot-form-minimal">
-            <div class="form-row">
-                <input 
-                    type="text" 
-                    name="version" 
-                    placeholder="Version" 
-                    value="1.0" 
-                    class="input-minimal"
-                    pattern="^\d+\.\d+$"
-                    required
-                >
-                <input 
-                    type="text" 
-                    name="description" 
-                    placeholder="Description (optional)" 
-                    class="input-minimal"
-                >
-                <button type="submit" class="btn-minimal btn-primary">Save Version</button>
-            </div>
-        </form>
-    </div>
-
-    <!-- Zen Counter (Hidden by default, shown in zen-mode) -->
-    <div class="zen-counter" id="zen-counter" style="display: none;">
-        <div id="zen-word-count">Words: 0</div>
-        <div id="zen-char-count">Characters: 0</div>
-    </div>
-</div>
-
-<script>
-    // Word count and zen mode for entry view
-    function initializeEntryMetrics() {
-        const entryText = document.querySelector('.entry-text');
-        if (!entryText) return;
-        
-        const text = entryText.textContent.trim();
-        const wordCount = text === '' ? 0 : text.split(/\s+/).length;
-        const charCount = text.length;
-        
-        console.log(`Entry: ${wordCount} words, ${charCount} characters`);
-        
-        // Store metrics for zen mode display
-        window.entryMetrics = { wordCount, charCount };
+<style>
+    input[type="text"] {
+        font-family: 'Space Grotesk', sans-serif;
     }
 
-    // Initialize zen mode toggle
-    function initializeZenMode() {
-        const zenToggle = document.getElementById('zen-toggle');
-        const zenCounter = document.getElementById('zen-counter');
-        const entryText = document.querySelector('.entry-text');
-        
-        if (!zenToggle) return;
-        
-        zenToggle.addEventListener('click', () => {
-            document.body.classList.toggle('zen-mode');
-            
-            // Show/hide zen counter based on zen mode state
-            if (zenCounter) {
-                if (document.body.classList.contains('zen-mode')) {
-                    // Update counter with actual metrics
-                    if (window.entryMetrics) {
-                        document.getElementById('zen-word-count').textContent = 
-                            `Words: ${window.entryMetrics.wordCount}`;
-                        document.getElementById('zen-char-count').textContent = 
-                            `Characters: ${window.entryMetrics.charCount}`;
-                    }
-                    zenCounter.style.display = 'block';
-                } else {
-                    zenCounter.style.display = 'none';
-                }
-            }
-        });
-        
-        // Save zen mode preference
-        if (localStorage.getItem('zenMode') === 'true') {
-            document.body.classList.add('zen-mode');
-            if (zenCounter) zenCounter.style.display = 'block';
-        }
+    input[type="text"]:focus {
+        outline: none;
+        border-color: var(--clr-cyan);
+        background: var(--bg-surface);
+        box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        initializeEntryMetrics();
-        initializeZenMode();
-    });
-</script>
+    .badge.variant-cyan {
+        background: rgba(0, 242, 255, 0.12);
+        border-color: var(--clr-cyan);
+        color: var(--clr-cyan);
+    }
+</style>
 {% endblock %}
