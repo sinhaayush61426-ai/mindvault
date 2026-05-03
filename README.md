@@ -10,6 +10,7 @@
 **MindVault** is a secure, offline-first writing vault with encrypted storage, character development tools, draft versioning, and distraction-free focus mode. All your data stays on your device—zero tracking, zero cloud sync, complete control.
 
 
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python)
 ![Flask](https://img.shields.io/badge/Flask-3.0-000000?logo=flask)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?logo=javascript&logoColor=black)
@@ -378,6 +379,3 @@ Contributions welcome! Please:
 ## 📄 License
 
 Open source for learning, experimentation, and personal use. Fork, modify, and adapt MindVault to your secure journaling needs.
-```
-
-```
