@@ -9,7 +9,6 @@
 
 **MindVault** is a secure, offline-first writing vault with encrypted storage, character development tools, draft versioning, and distraction-free focus mode. All your data stays on your device—zero tracking, zero cloud sync, complete control.
 
-<<<<<<< HEAD
 ## Table of Contents
 
 - [Vision](#vision)
@@ -24,18 +23,6 @@
 - [Future Roadmap](#future-roadmap)
 - [Contributing](#contributing)
 - [License](#license)
-=======
-## ✨ Key Highlights
-
-🔐 **Zero-Knowledge Encryption** — Client-side AES-128 encryption; server never sees plaintext  
-✍️ **Creative Workspace** — Character profiles, unlimited draft snapshots, auto-save every 30 seconds  
-🧘 **Zen Mode** — Distraction-free writing with live word counter  
-📲 **Progressive Web App** — Works offline, installs on any device, syncs automatically  
-🔑 **Biometric Auth** — Face ID / Touch ID / Windows Hello (no passwords needed)  
-🎨 **Beautiful & Fast** — Dark cyberpunk UI with global design system
-
-## 🚀 Quick Start
->>>>>>> c0c2c959b88965dfa045a342c045d5d16c18bb54
 
 ```bash
 # Install dependencies
@@ -52,7 +39,6 @@ python3 app.py
 - **[EXPANSION.md](./EXPANSION.md)** — Detailed feature guide (Character Matrix, Snapshots, Zen Mode, PWA)
 - **[MIGRATION.md](./MIGRATION.md)** — Upgrade path from v1 to v2
 
-<<<<<<< HEAD
 ---
 
 ## Features
@@ -634,52 +620,6 @@ mindvault/
 ├── migrate_db.py                       # Database migration script
 ├── requirements.txt                    # Python dependencies
 ├── manifest.json                       # PWA manifest (icons, shortcuts, metadata)
-=======
-## What's Included
-
-### 🎭 Author's Archive
-- **Character Matrix**: Build rich character profiles with personality traits, backstories, relationships
-- **Draft Versioning**: Unlimited snapshots with custom version numbers and restoration
-
-### 🛡️ Security
-- **Password**: Bcrypt-hashed accounts
-- **Entries**: AES-128 encrypted before storage
-- **Sessions**: Flask-Login with `@login_required` protection
-- **Offline**: IndexedDB + Service Worker for secure offline access
-
-### 🎨 Design System
-- 20+ CSS variables (colors, spacing, transitions)
-- 14 custom SVG icons with multiple sizes
-- Responsive across mobile, tablet, desktop
-- Cyberpunk aesthetic with cyan/violet/pink gradients
-
-## 📂 Project Structure
-
-```
-mindvault/
-├── app.py                           # Flask + SQLAlchemy models + 25+ routes
-├── security.py                      # Fernet encryption utilities
-├── manifest.json                    # PWA metadata & configuration
-├── templates/                       # Jinja2 HTML templates
-│   ├── base.html, index.html, login.html, register.html
-│   ├── dashboard.html, entry.html, characters.html
-│   ├── snapshots.html, character_form.html, offline.html
-│   └── ...
-├── static/
-│   ├── css/
-│   │   ├── style.css               # Main styles + 20+ CSS variables
-│   │   └── expansion.css           # v2.0 features (Zen, Matrix, Snapshots)
-│   ├── js/
-│   │   ├── service-worker.js       # PWA offline + caching
-│   │   ├── enhanced-main.js        # Zen Mode + auto-save
-│   │   ├── biometric-auth.js       # WebAuthn (Face ID/Touch ID)
-│   │   └── main.js                 # General features
-│   └── svg-icons.html              # 14 custom icons
-└── instance/database.db            # SQLite (local storage)
-```
-├── EXPANSION.md                        # v2.0 feature documentation
-├── MIGRATION.md                        # Upgrade guide for v1 → v2
->>>>>>> c0c2c959b88965dfa045a342c045d5d16c18bb54
 │
 ├── templates/                          # Jinja2 templates
 │   ├── base.html                      # Base layout with PWA metadata
