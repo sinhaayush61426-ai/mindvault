@@ -147,7 +147,6 @@ mindvault/
 │   │   └── main.js                 # General features
 │   └── svg-icons.html              # 14 custom icons
 └── instance/database.db            # SQLite (local storage)
-```
 ├── EXPANSION.md                        # v2.0 feature documentation
 ├── MIGRATION.md                        # Upgrade guide for v1 → v2
 │
