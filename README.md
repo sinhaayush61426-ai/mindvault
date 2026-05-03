@@ -9,6 +9,16 @@
 
 **MindVault** is a secure, offline-first writing vault with encrypted storage, character development tools, draft versioning, and distraction-free focus mode. All your data stays on your device—zero tracking, zero cloud sync, complete control.
 
+
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python)
+![Flask](https://img.shields.io/badge/Flask-3.0-000000?logo=flask)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?logo=javascript&logoColor=black)
+![SQLite](https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite)
+![Chart.js](https://img.shields.io/badge/Chart.js-4-FF6384?logo=chartdotjs)
+![Cryptography](https://img.shields.io/badge/Fernet-47.0-4CAF50?logo=keybase)
+
+
+---
 ## Table of Contents
 
 - [Vision](#vision)
