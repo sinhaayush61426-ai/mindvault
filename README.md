@@ -570,7 +570,7 @@ if character.user_id != current_user.id:
 
 ### Production Deployment Security Checklist
 
-- [ ] **Environment Variables**: Store SECRET_KEY, ENCRYPTION_KEY in `.env` (never commit)
+- [] **Environment Variables**: Store SECRET_KEY, ENCRYPTION_KEY in `.env` (never commit)
 - [ ] **HTTPS/TLS**: Enable SSL certificates (Let's Encrypt free option)
 - [ ] **Debug Mode**: Set `DEBUG=False` in production
 - [ ] **Database Backups**: Regular encrypted backups with versioning
