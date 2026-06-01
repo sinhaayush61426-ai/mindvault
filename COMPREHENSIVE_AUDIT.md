@@ -771,7 +771,48 @@ Bottom-aligned snapshot form (less cluttered)
 
 ## Deployment Checklist {#deployment}
 
+### Initial Setup (First Time Only)
+
+**Step 1: Install Python Dependencies**
+```bash
+pip install -r requirements.txt
+```
+**Time:** 2-5 minutes  
+**What it installs:** Flask, SQLAlchemy, encryption, and 30+ other packages
+
+**Step 2: Verify Installation**
+```bash
+python3 -c "import flask_login; print('✅ Flask-Login installed')"
+```
+**Expected output:** `✅ Flask-Login installed`
+
+**Step 3: Run the Application**
+```bash
+python3 app.py
+```
+**Expected output:**
+```
+ * Serving Flask app 'app'
+ * Debug mode: on
+ * Running on http://127.0.0.1:5000
+```
+
+**Step 4: Access MindVault**
+- Open browser: `http://127.0.0.1:5000`
+- Register new account
+- Start creating encrypted entries
+
+### Common Issues & Solutions
+
+| Problem | Solution |
+|---------|----------|
+| `ModuleNotFoundError: No module named 'flask_login'` | Run `pip install -r requirements.txt` |
+| `pip: command not found` | Use `pip3 install -r requirements.txt` |
+| Installation takes long | Normal for first install, be patient or use `-q` flag |
+| `Permission denied` | Add `--user` flag: `pip install --user -r requirements.txt` |
+
 ### Pre-Deployment Testing
+
 - [ ] Run all 10 test procedures (see Testing Guide)
 - [ ] Test responsive design (mobile, tablet, desktop)
 - [ ] Verify no console errors
@@ -784,6 +825,7 @@ Bottom-aligned snapshot form (less cluttered)
 - [ ] Test character operations
 
 ### Pre-Deployment Verification
+
 - [ ] All 15 routes functional
 - [ ] 100% hyperlink coverage
 - [ ] No broken links
@@ -793,15 +835,17 @@ Bottom-aligned snapshot form (less cluttered)
 - [ ] PWA manifest valid
 
 ### Deployment Steps
-1. [ ] Pull latest changes from repository
-2. [ ] No database migrations needed
-3. [ ] No Python dependencies to add
-4. [ ] Just CSS and HTML template updates
-5. [ ] Deploy to staging environment first
-6. [ ] Test all features on staging
-7. [ ] Deploy to production
+
+1. [ ] Install dependencies: `pip install -r requirements.txt`
+2. [ ] No database migrations needed (auto-created)
+3. [ ] No additional configuration needed (uses SQLite)
+4. [ ] Start development: `python3 app.py`
+5. [ ] For production, use WSGI server (gunicorn, uWSGI)
+6. [ ] Set environment variables for production
+7. [ ] Enable HTTPS and secure cookies
 
 ### Post-Deployment Monitoring
+
 - [ ] Monitor error logs for issues
 - [ ] Check user feedback and testimonials
 - [ ] Verify feature adoption
@@ -810,11 +854,12 @@ Bottom-aligned snapshot form (less cluttered)
 - [ ] Watch for edge cases or bugs
 
 ### Rollback Plan
+
 If critical issues are found:
-1. Revert `dashboard.html` to previous version
-2. Revert `view_entry.html` to previous version
-3. Revert `expansion.css` to previous version
-4. All functionality returns to original state
+1. Stop the application
+2. Revert code changes (via git)
+3. Restart application
+4. All functionality returns to previous state
 
 ---
 
