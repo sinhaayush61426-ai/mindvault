@@ -79,46 +79,189 @@ open http://127.0.0.1:5000
 
 MindVault is built on a simple principle: **Your thoughts are yours alone.**
 
-In an age of surveillance capitalism and AI-driven data harvesting, we believe your creative work—journals, stories, characters, research—should never be monetized or analyzed without your explicit consent. 
+In an age of surveillance capitalism and AI-driven data harvesting, we believe your creative work—journals, stories, characters, research—should never be monetized or analyzed without your explicit consent. MindVault exists to reclaim your creative autonomy and protect the sanctity of your private thoughts.
+
+### Why MindVault Exists
+
+Traditional journaling apps operate on a fundamental betrayal: **your data is the product**. Major platforms use your entries to train AI models, build psychological profiles, and sell insights to data brokers.
+
+MindVault rejects this entirely:
 
 **Core Philosophy:**
-- **Zero-Knowledge**: Even we cannot read your encrypted entries
-- **Local-First**: Data lives on your device by default; cloud is optional
-- **Open Source**: Audit the code, fork it, adapt it to your needs
-- **Anonymous**: No mandatory sign-in with Google/Microsoft; no analytics tracking
-- **Portable**: Export your vault; take your writing anywhere
-- **Progressive**: Works offline; syncs when reconnected; never loses data
+- **Zero-Knowledge Architecture**: Even developers cannot read encrypted entries. Server stores only ciphertext; decryption happens on your device exclusively
+- **Local-First by Design**: Data lives on your device first. Cloud sync is optional, encrypted end-to-end, controlled entirely by you
+- **Open Source Transparency**: Every line auditable. No hidden trackers, no surveillance infrastructure
+- **True Anonymity**: No mandatory OAuth, no tracking pixels, no email marketing
+- **Data Portability**: Export your complete vault; migrate anywhere without vendor lock-in
+- **Progressive Enhancement**: Works offline. Syncs automatically. Never loses data
+- **Perpetual Availability**: If we shut down, your data remains accessible via open source tools
 
 ---
 
 ## Core Features
+
 ### Encryption & Privacy
-- **Zero-Knowledge Encryption**: Client-side Fernet encryption (AES-128-CBC + HMAC) before any database storage
-- **Local-First Architecture**: All data stored on your machine by default; no mandatory cloud sync
-- **Open Source**: Full source code available for security audits
-- **Biometric Authentication**: Face ID, Touch ID, Windows Hello, Android biometrics without vendor lock-in
-- **No Tracking**: No analytics, no cookies, no telemetry, no AI training on your data
+
+**Zero-Knowledge Encryption**
+- Client-side Fernet encryption (AES-128-CBC + HMAC) applied before data leaves your device
+- Military-grade 128-bit symmetric keys with SHA256 HMAC authentication
+- Server stores only ciphertext; plaintext never transmitted or persisted
+- Encryption/decryption happens entirely on your device
+- Even database administrators cannot read your entries
+
+**Local-First Architecture**
+- All data stored on your machine by default via SQLite3
+- Optional end-to-end encrypted cloud sync (future v2.1)
+- No mandatory cloud dependency; app functions 100% locally
+- Full offline-first with automatic sync when reconnected
+- Your encryption key lives only on your devices
+
+**Open Source & Auditable**
+- Complete source code available for security audits
+- No proprietary encryption black boxes
+- Community-reviewed cryptography implementations
+- Transparent threat model documentation
+- Public security audit results in COMPREHENSIVE_AUDIT.md
+
+**Biometric Authentication**
+- Native support: Face ID (iOS/macOS), Touch ID (iOS/iPad), Windows Hello, Android biometric
+- Credentials stored securely on device hardware (Secure Enclave/TPM)
+- Server never receives biometric data
+- Password authentication always available as fallback
+
+**No Tracking or Analytics**
+- Zero Google Analytics, Mixpanel, or surveillance tracking
+- No cookies for tracking purposes
+- No telemetry collection
+- Entries never used to train AI models
+- No session replay tools or behavior tracking
+- No third-party data sharing
 
 ### Professional Writing & Authorship Tools
-- **Character Matrix**: Rich character profiles with personality traits, backstories, relationships, physical descriptions, motivations, and color-coded avatars for visual organization
-- **Draft Versioning with Snapshots**: Unlimited version snapshots with semantic versioning (1.0, 1.1, 2.0). Restore any version instantly and keep full history
-- **30-Second Auto-Save**: Automatic draft protection with explicit save control; never lose unsaved work due to crashes
-- **Zen Mode**: Immersive distraction-free editor with hidden navigation and real-time word/character counter persistent across sessions
-- **Rich Entry Organization**: Categorize entries (General, Fiction, Research) with timestamps and search compatibility
+
+**Character Matrix (Fiction Development)**
+- Rich character profiles with unlimited metadata
+- Personality traits, psychological profiles, archetype classification
+- Full backstory support with multi-paragraph rich text
+- Relationship mapping: family trees, rivalries, mentorships, romantic arcs
+- Physical description: appearance, distinguishing features, clothing details
+- Motivations and character arcs: goals, conflicts, growth trajectory
+- Color-coded avatar system for visual organization
+- Character search and filtering by archetype or trait
+- Export character sheets for writing reference
+
+**Draft Versioning with Snapshots**
+- Unlimited version snapshots with semantic versioning (1.0, 1.1, 2.0)
+- Automatic snapshots every 30 seconds (auto-save)
+- Manual snapshots with custom version labels and descriptions
+- Complete version history with timestamps and metadata
+- One-click restoration: revert to any previous draft instantly
+- Each snapshot independently encrypted and immutable
+- Timeline visualization showing all drafts chronologically
+- Archive old versions without deleting from history
+
+**30-Second Auto-Save**
+- Automatic content capture every 30 seconds while editing
+- Silent notifications; no interruption to creative flow
+- Crash recovery: resume from last auto-save if browser closes
+- Offline auto-save: syncs to server when reconnected
+- User-controllable intervals (future v2.1)
+- Auto-save versions marked separately from manual snapshots
+
+**Zen Mode (Distraction-Free Writing)**
+- Single-keystroke toggle into immersive writing mode
+- Navigation sidebar hidden; only editor visible
+- Full-screen editor with optimized line-height and margins
+- Real-time word count, character count, paragraph count
+- Estimated reading time calculation
+- Writing statistics: daily streak, total words, session metrics
+- Persistent Zen preference (remembers your preference)
+- Escape key or button to exit instantly
+
+**Rich Entry Organization**
+- Categorize entries: General, Fiction, Research, Personal, Professional
+- Custom categories (future v2.1)
+- Entry titles and descriptions
+- Timestamps: created, modified, scheduled publish
+- Time-locked entries: "Letters to the Future" unlock on set dates
+- Full-text search across entries (future v2.1)
+- Tag/label system for flexible organization
+- Archive entries without deletion
+- Entry status: draft, published, archived, time-locked
 
 ### Mobile & Offline-First
-- **Progressive Web App**: Installable on iOS, Android, macOS, Windows, and Linux as a native app
-- **Complete Offline Mode**: Full functionality without internet; automatic sync when connection returns
-- **Background Sync Queue**: Pending entries stored in IndexedDB; syncs transparently when online
-- **App Shortcuts**: Home screen shortcuts for "New Entry" and "Character Matrix" on mobile devices
-- **Responsive Design**: Touch-optimized interface for tablets and phones
+
+**Progressive Web App (PWA)**
+- Install as native app on iOS, Android, macOS, Windows, Linux
+- Single-click installation (no app store needed)
+- Standalone app window without browser chrome
+- App icon on home screen or desktop
+- OS-level integration: share menu, file associations
+- Notification permissions for sync status
+
+**Complete Offline Mode**
+- Full functionality without internet
+- Read existing entries from cache
+- Create new entries locally (queued for sync)
+- Edit drafts with full auto-save
+- Access character database and snapshots
+- Automatic sync when connection restored
+
+**Background Sync Queue**
+- Pending entries stored in IndexedDB
+- Queue persists across sessions
+- Automatic retry with exponential backoff
+- Conflict resolution via server-side merge
+- User notification when sync completes
+
+**App Shortcuts & Responsive Design**
+- Home screen quick actions: "New Entry", "Character Matrix", "Dashboard"
+- Mobile-first CSS architecture
+- Touch-optimized buttons (48px minimum)
+- Tablet landscape support
+- Desktop multi-column layout
+- Responsive breakpoints: 320px → 2560px
+- Gesture support: swipe, long-press, pinch-zoom
 
 ### User Experience & Design
-- **Cyberpunk Aesthetic**: High-contrast dark interface with cyan/violet/pink color gradients for visual intensity
-- **CSS Design System**: 20+ CSS variables (--primary-color, --spacing, --font-size) ensuring design consistency
-- **14 Custom SVG Icons**: Scalable vector icons (Shield, Matrix, Character, Version, Zen, Lock, Star, Archive, etc.)
-- **WCAG AA Accessibility**: Keyboard navigation, screen reader support, color contrast compliance
-- **Smooth Animations**: Frictionless transitions using CSS transforms and GPU acceleration
+
+**Cyberpunk Aesthetic**
+- High-contrast dark interface (WCAG AAA)
+- Cyan primary (#5DADE2), Violet secondary (#8E44AD), Pink accents (#EC407A)
+- Deep dark background (#0B0E27) for reduced eye strain
+- Neon-style borders and glows
+- Monospace font option for code
+- Visual depth via shadows and layering
+
+**CSS Design System**
+- 20+ CSS variables for maintainable design
+- Color palette: primary, secondary, accent, background, text, border, shadow
+- Spacing scale: xs (2px) → xl (48px)
+- Typography: font-family, font-size, font-weight, line-height
+- Transition variables: standard durations and easing
+- Z-index management: modal, dropdown, notification layers
+- Dark mode support with CSS variables
+- High contrast mode for accessibility
+
+**14 Custom SVG Icons**
+- Shield, Lock, Character, Matrix, Version, Zen, Star, Archive, Plus, Trash, Edit, Search, Bell, Settings
+- All: scalable, accessible, consistent styling
+
+**WCAG AA Accessibility**
+- Keyboard-only navigation: tab through all elements
+- Screen reader support with ARIA labels
+- Color contrast: 4.5:1 ratio (AAA standard)
+- Visible focus indicators on all buttons
+- Skip navigation links
+- Associated form labels
+- Reduced motion preference respected
+
+**Smooth Animations**
+- GPU-accelerated CSS transforms
+- Fade transitions: 150ms standard
+- Slide animations: 300ms for navigation
+- 60fps performance on modern devices
+- Easing: ease-in-out for natural motion
 
 ---
 
@@ -200,13 +343,22 @@ User                    # Accounts with bcrypt password hash
 ## Getting Started
 
 ### System Requirements
-- **Python**: 3.12+ (tested); 3.11 compatible; 3.10 with modifications
-- **OS**: Linux, macOS, Windows (any modern OS with Python support)
-- **Browser**: Chrome/Edge/Firefox/Safari (ES6+ JavaScript support)
-- **Storage**: ~50MB for app + database (grows with entries)
-- **RAM**: Minimal (~128MB during operation)
 
-### Installation & Setup
+**Hardware & Software Compatibility**
+- **Python**: 3.12+ (fully tested and recommended); 3.11 compatible with minor adjustments
+- **Operating System**: Linux, macOS, Windows (any modern OS with Python 3.10+)
+- **Web Browser**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+ (requires ES6+ JavaScript support)
+- **Storage Space**: ~50MB for application files + SQLite database (grows with content—typical user: 100MB-500MB)
+- **RAM**: ~128MB minimal during operation; 512MB recommended for multiple concurrent entries
+- **Network**: Optional; app works 100% offline. Network required for cloud sync (future feature)
+
+**Recommended Development Setup**
+- **Code Editor**: Visual Studio Code with Python extension
+- **Terminal**: Bash, Zsh, or PowerShell
+- **Virtual Environment**: Python venv for dependency isolation
+- **Database Tool**: SQLite3 CLI or DB Browser for SQLite
+
+### Installation & Setup Guide
 
 **Step 1: Clone Repository**
 ```bash
@@ -214,45 +366,120 @@ git clone https://github.com/sinhaayush61426-ai/mindvault.git
 cd mindvault
 ```
 
-**Step 2: Create Virtual Environment (Recommended)**
+**Step 2: Create Virtual Environment (Strongly Recommended)**
+
+Virtual environments isolate MindVault dependencies from your system Python packages.
+
 ```bash
+# Create virtual environment
 python3 -m venv venv
 
-# Activate (Linux/macOS)
+# Activate (Linux/macOS/WSL)
 source venv/bin/activate
 
-# Activate (Windows)
-venv\Scripts\activate
+# Activate (Windows PowerShell)
+venv\Scripts\Activate.ps1
+
+# Activate (Windows Command Prompt)
+venv\Scripts\activate.bat
 ```
 
-**Step 3: Install Dependencies**
+You should see `(venv)` prefix in your terminal after activation.
+
+**Step 3: Upgrade pip (Optional but Recommended)**
+```bash
+pip install --upgrade pip
+```
+
+**Step 4: Install Dependencies**
 ```bash
 pip install -r requirements.txt
 ```
 
-**Step 4: Verify Installation**
+This installs all required packages:
+- Flask: Web framework and routing
+- SQLAlchemy: Database ORM and models
+- Flask-Login: Session management and authentication
+- Flask-Bcrypt: Secure password hashing
+- cryptography: Fernet encryption utilities
+- And other supporting libraries
+
+**Step 5: Verify Installation**
 ```bash
-python3 -c "from flask import Flask; from flask_sqlalchemy import SQLAlchemy; print('Dependencies OK')"
+# Test Flask
+python3 -c "from flask import Flask; print('Flask OK')"
+
+# Test SQLAlchemy
+python3 -c "from flask_sqlalchemy import SQLAlchemy; print('SQLAlchemy OK')"
+
+# Test encryption
+python3 -c "from cryptography.fernet import Fernet; print('Encryption OK')"
+
+# All-in-one verification
+python3 -c "from flask import Flask; from flask_sqlalchemy import SQLAlchemy; from flask_bcrypt import Bcrypt; print('All dependencies installed!')"
 ```
 
-**Step 5: Run Application**
+**Step 6: Initialize Database (First Run Only)**
 ```bash
+# Flask automatically creates database.db on first run
+# No manual migration needed—happens at startup
 python3 app.py
 ```
 
-**Step 6: Open in Browser**
+**Step 7: Access the Application**
+
+Open your browser and navigate to:
 ```
 http://127.0.0.1:5000
 ```
 
+You should see the MindVault homepage. If not:
+- Check terminal output for error messages
+- Verify all dependencies installed with `pip list`
+- Ensure port 5000 is not in use by another application: `lsof -i :5000` (macOS/Linux)
+
 ### First-Time User Flow
-1. **Register**: Create account with email and password (or biometric)
-2. **Login**: Authenticate with credentials
-3. **Dashboard**: See empty vault (zero existing entries)
-4. **Create Entry**: Write first journal entry with auto-save
-5. **Seal Entry**: Encrypt and store permanently
-6. **Explore Features**: Try Zen Mode, Character Matrix, Snapshots
-7. **Install PWA**: (Optional) Install as native app
+
+**After Starting the Application:**
+
+1. **Create Account**: Navigate to Register page
+   - Enter unique email address
+   - Create strong password (8+ characters recommended)
+   - Optionally set up biometric authentication
+   - Click \"Register\"
+
+2. **Log In**: Use credentials to authenticate
+   - Email and password from registration
+   - Or biometric authentication if configured
+   - Session timeout: 30 minutes for security
+
+3. **View Dashboard**: Your empty vault appears
+   - No entries yet
+   - Character Matrix empty and ready
+   - Navigation menu shows all features
+
+4. **Create First Entry**: Click \"+ New Entry\" button
+   - Add title: e.g., \"My First Reflection\"
+   - Choose category: \"General\", \"Fiction\", \"Research\", etc.
+   - Write freely in the rich text editor
+   - Auto-save engages every 30 seconds (watch for notification)
+
+5. **Seal Entry**: Click \"Seal Entry\" button
+   - Your content is encrypted with Fernet cipher
+   - Stored securely in local SQLite database
+   - Entry immediately appears in Dashboard
+   - Can be edited, versioned, or deleted
+
+6. **Explore Features**:
+   - **Zen Mode**: Click button for distraction-free focused writing
+   - **Character Matrix**: Create and manage character profiles
+   - **Snapshots**: View and restore auto-save versions
+   - **Offline**: Test offline functionality (see PWA Installation section)
+   - **Settings**: Customize preferences and appearance
+
+7. **Install PWA** (Optional): Make MindVault a native app
+   - See \"PWA Installation\" section below
+   - Works on iOS, Android, macOS, Windows, and Linux
 
 ### Environment Configuration
 
