@@ -282,11 +282,11 @@ MindVault v2.0 introduces **enterprise-grade creative features** while maintaini
 | **Dashboard Redesign** | Content-first, minimal UI | [Complete] |
 
 ### No Breaking Changes
-- [YES] All v1 entries remain encrypted and accessible
-- [YES] User accounts fully compatible
-- [YES] Database automatically migrates on first run
-- [YES] Existing biometric auth continues to work
-- [YES] All v1 routes remain functional
+- [x] All v1 entries remain encrypted and accessible
+- [x] User accounts fully compatible
+- [x] Database automatically migrates on first run
+- [x] Existing biometric auth continues to work
+- [x] All v1 routes remain functional
 
 ---
 
@@ -744,11 +744,11 @@ def view_entry(id):
 ```
 
 **All Sensitive Routes Protected:**
-- [YES] Dashboard (`/dashboard`)
-- [YES] Entry creation/editing/deletion (`/entry/*`)
-- [YES] Character management (`/character/*`)
-- [YES] Snapshots (`/snapshot/*`)
-- [YES] User settings (future)
+- [x] Dashboard (`/dashboard`)
+- [x] Entry creation/editing/deletion (`/entry/*`)
+- [x] Character management (`/character/*`)
+- [x] Snapshots (`/snapshot/*`)
+- [x] User settings (future)
 
 **Unprotected (Public) Routes:**
 - Home page (`/`)
@@ -878,12 +878,12 @@ if character.user_id != current_user.id:
 - Network fetch only for fresh data
 
 **Offline Capabilities:**
-- [YES] Read existing entries (all cached)
-- [YES] Create new entries (queued in IndexedDB)
-- [YES] Edit drafts (cached auto-save)
-- [YES] View character matrix
-- [YES] Access settings
-- [NO] Sync until connection returns
+- [x] Read existing entries (all cached)
+- [x] Create new entries (queued in IndexedDB)
+- [x] Edit drafts (cached auto-save)
+- [x] View character matrix
+- [x] Access settings
+- [ ] Sync until connection returns
 
 **Automatic Sync on Reconnect:**
 - Background sync API triggers when online restored
