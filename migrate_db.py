@@ -1,3 +1,28 @@
+# ================================
+# DATABASE MIGRATION UTILITY [DEPRECATED]
+# ================================
+#
+# WARNING: This file is NOT actively used.
+#
+# Previous Purpose:
+#   Old database migration script for v1 to v2 upgrade
+#   handling schema changes and column additions.
+#
+# Current Status:
+#   - Deprecated: app.py now uses db.create_all() for schema
+#   - Kept for reference only
+#   - Can be safely deleted
+#
+# If you need to run migrations:
+#   Modify app.py or create alembic-based migrations
+#
+# See Also:
+#   - MIGRATION.md for v1→v2 upgrade guide
+#   - COMPREHENSIVE_AUDIT.md for changes
+#
+# Last Modified: May 2026
+#
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 

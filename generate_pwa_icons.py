@@ -1,7 +1,35 @@
 #!/usr/bin/env python3
 """
-Generate PWA icon assets for MindVault
-Creates 192x192, 512x512, and maskable icons with the MindVault branding
+================================
+PWA ICON GENERATOR - MindVault
+================================
+
+Purpose:
+  Utility script to generate Progressive Web App icon assets
+  for various device resolutions and display modes.
+
+Generates:
+  - 192x192 icon (standard PWA icon)
+  - 512x512 icon (splash screen, app store listing)
+  - Maskable 192x192 icon (adaptive icon for new Android)
+  - Maskable 512x512 icon (adaptive icon for new Android)
+
+Usage:
+  python3 generate_pwa_icons.py
+
+Requirements:
+  - Pillow (pip install Pillow)
+
+Output:
+  Creates /static/images/ directory with PNG icon files
+  Icons use MindVault branding with cyan and purple gradient
+
+Manifest Integration:
+  Run this script, then manifest.json will reference the generated images.
+  For development, inline SVG data URIs are used as fallback.
+
+Last Modified: May 2026
+Status: Production Ready (optional - icons auto-generated via SVG)
 """
 
 from PIL import Image, ImageDraw

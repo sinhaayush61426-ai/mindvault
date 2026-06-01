@@ -1,3 +1,32 @@
+"""
+================================
+SECURITY UTILITIES - MindVault
+================================
+
+Purpose:
+  Centralized security functions for encryption, password hashing,
+  and authentication helpers for MindVault.
+
+Functions:
+  - VaultSecurity class: Encryption/decryption wrapper for Fernet cipher
+  - Password validation and hashing utilities
+  - Session management helpers
+  - CSRF token generation
+
+Encryption:
+  - Algorithm: Fernet (AES-128-CBC with HMAC)
+  - Key Format: Base64-encoded 32-byte key
+  - Usage: All user diary entries encrypted before database storage
+
+Password Security:
+  - Hashing: bcrypt with 12 rounds
+  - Never: Plaintext passwords stored or logged
+  - Validation: Enforced on registration and login
+
+Last Modified: May 2026
+Status: Production Ready
+"""
+
 from cryptography.fernet import Fernet
 import os
 

@@ -1,14 +1,45 @@
 {% extends "base.html" %}
 
-{% block title %}{{ entry.title if entry else 'Vault Entry' }} - MindVault{% endblock %}
+{% block title %}Edit - {{ entry.title }} - MindVault{% endblock %}
 
 {% block content %}
 <section class="section">
-    <div class="container">
-        <div class="glass-panel" style="padding: 2.5rem;">
-            <p class="text-muted" style="margin-bottom: 1rem; letter-spacing: 1px; text-transform: uppercase; font-size: 0.85rem;">{{ entry.category | default('General') }}</p>
-            <h1 class="section-title">{{ entry.title if entry else 'Untitled Vault Entry' }}</h1>
-            <div class="section-copy">{{ content if content else 'No entry content available.' }}</div>
+    <div class="container" style="max-width: 900px;">
+        <h1 class="section-title gradient-text" style="margin-bottom: 2rem;">Edit Entry</h1>
+
+        <div class="glass-panel form-card">
+            <form action="{{ url_for('edit_entry', entry_id=entry.id) }}" method="POST">
+                <div class="form-field">
+                    <input type="text" name="title" value="{{ entry.title }}" placeholder="Entry Title..." style="background: transparent; border: none; color: #fff; font-size: 2.5rem; font-weight: 900; width: 100%; outline: none;" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="category">Category</label>
+                    <div class="custom-select">
+                        <select name="category" id="category">
+                            <option value="General" {% if entry.category == 'General' %}selected{% endif %}>General</option>
+                            <option value="Novella" {% if entry.category == 'Novella' %}selected{% endif %}>Novella/Fiction</option>
+                            <option value="Research" {% if entry.category == 'Research' %}selected{% endif %}>Science Research</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    <textarea name="content" placeholder="Update your entry..." required>{{ content }}</textarea>
+                </div>
+
+                <div class="submit-block" style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary">
+                        <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"></path>
+                        </svg>
+                        Save Changes
+                    </button>
+                    <a href="{{ url_for('view_entry', entry_id=entry.id) }}" class="btn btn-secondary" style="text-decoration: none;">
+                        Cancel
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
 </section>

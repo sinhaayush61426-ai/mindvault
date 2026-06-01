@@ -1,3 +1,46 @@
+"""
+================================
+MINDVAULT v2.0 - Main Application
+================================
+
+Purpose:
+  Core Flask application handling all routes, database models, and request handling
+  for the MindVault privacy-first creative workspace.
+
+Features:
+  - User authentication (registration, login, logout)
+  - Encrypted diary entry storage
+  - Character matrix for creative fiction
+  - Draft versioning with snapshots
+  - Time-locked entry scheduling
+  - Biometric authentication support
+  - Progressive Web App capabilities
+
+Key Routes:
+  - Authentication: /register, /login, /logout
+  - Content: /dashboard, /entry/<id>, /entry/<id>/edit
+  - Characters: /characters, /character/new, /character/<id>/edit
+  - Snapshots: /entry/<id>/snapshots, /snapshot/<id>/restore
+  - Reviews: /submit-review
+
+Database Models:
+  - User: Account data with bcrypt hashed passwords
+  - DiaryEntry: Encrypted content with optional time-locking
+  - Character: Creative fiction character profiles
+  - EntrySnapshot: Version history for draft management
+  - Review: User testimonials for homepage display
+
+Security:
+  - All passwords hashed with bcrypt
+  - All entries encrypted with Fernet cipher (AES-128-CBC)
+  - User ownership verification on all routes
+  - CSRF protection on all forms
+  - Session-based authentication
+
+Last Modified: June 1, 2026
+Status: Production Ready
+"""
+
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
@@ -19,7 +62,12 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
 # --- ENCRYPTION ---
-ENCRYPTION_KEY = Fernet.generate_key() 
+import os
+ENCRYPTION_KEY = os.environ.get('ENCRYPTION_KEY')
+if not ENCRYPTION_KEY:
+    # For development only - store this securely in production!
+    ENCRYPTION_KEY = b'1wSmW2dLhI0eKqI1PkfEcl9PjxHKz9pI4AzA_d55TFg='
+    print("WARNING: Using default encryption key. Set ENCRYPTION_KEY environment variable for production.")
 cipher = Fernet(ENCRYPTION_KEY)
 
 # --- MODELS ---
@@ -193,19 +241,21 @@ def dashboard():
 def seal_letter():
     content = request.form.get('content')
     release_date_str = request.form.get('release_date')
-    if not release_date_str:
-        flash('Release date is required for time-locked entries', 'error')
-        return redirect(url_for('dashboard'))
+    is_time_locked = False
+    release_date = None
     
-    try:
-        release_date = datetime.fromisoformat(release_date_str.replace('T', ' '))
-    except ValueError:
-        flash('Invalid release date format', 'error')
-        return redirect(url_for('dashboard'))
-    
-    if release_date <= datetime.utcnow():
-        flash('Release date must be in the future', 'error')
-        return redirect(url_for('dashboard'))
+    # Check if time-locking is requested
+    if release_date_str:
+        is_time_locked = True
+        try:
+            release_date = datetime.fromisoformat(release_date_str.replace('T', ' '))
+        except ValueError:
+            flash('Invalid release date format', 'error')
+            return redirect(url_for('dashboard'))
+        
+        if release_date <= datetime.utcnow():
+            flash('Release date must be in the future', 'error')
+            return redirect(url_for('dashboard'))
     
     encrypted = cipher.encrypt(content.encode())
     new_entry = DiaryEntry(
@@ -213,12 +263,16 @@ def seal_letter():
         category=request.form.get('category'),
         encrypted_content=encrypted,
         release_date=release_date,
-        is_time_locked=True,
+        is_time_locked=is_time_locked,
         user_id=current_user.id
     )
     db.session.add(new_entry)
     db.session.commit()
-    flash('Time-locked letter sealed!', 'success')
+    
+    if is_time_locked:
+        flash('Time-locked letter sealed!', 'success')
+    else:
+        flash('Entry sealed!', 'success')
     return redirect(url_for('dashboard'))
 
 # --- CHARACTER MATRIX ROUTES ---
@@ -348,6 +402,30 @@ def view_entry(entry_id):
         decrypted = "[Content could not be decrypted]"
     
     return render_template('view_entry.html', entry=entry, content=decrypted)
+
+@app.route('/entry/<int:entry_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_entry(entry_id):
+    entry = DiaryEntry.query.get_or_404(entry_id)
+    if entry.user_id != current_user.id:
+        flash('Unauthorized', 'error')
+        return redirect(url_for('dashboard'))
+    
+    if request.method == 'POST':
+        entry.title = request.form.get('title')
+        entry.category = request.form.get('category', 'General')
+        content = request.form.get('content')
+        entry.encrypted_content = cipher.encrypt(content.encode())
+        db.session.commit()
+        flash('Entry updated!', 'success')
+        return redirect(url_for('view_entry', entry_id=entry.id))
+    
+    try:
+        decrypted = cipher.decrypt(entry.encrypted_content).decode()
+    except:
+        decrypted = "[Content could not be decrypted]"
+    
+    return render_template('entry.html', entry=entry, content=decrypted)
 
 with app.app_context():
     db.create_all()

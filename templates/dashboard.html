@@ -13,6 +13,7 @@
                     <article class="card" style="margin-bottom: 1rem; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(0, 242, 255, 0.05)'" onmouseout="this.style.background='transparent'">
                         <small class="text-muted">{{ entry.category | default('General') }}</small>
                         <div style="margin-top: 0.6rem; font-weight: 700; color: var(--clr-cyan);">{{ entry.title }}</div>
+                        {% if entry.is_time_locked %}<div style="margin-top: 0.4rem; font-size: 0.8rem; color: var(--clr-pink);">🔒 Time-Locked</div>{% endif %}
                     </article>
                 </a>
                 {% endfor %}
@@ -44,6 +45,17 @@
                     <textarea name="content" placeholder="Start writing..."></textarea>
                 </div>
 
+                <div class="form-field" style="background: var(--bg-surface-alt); padding: 1rem; border-radius: 6px; border: 1px solid var(--border);">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 0.5rem;">
+                        <input type="checkbox" id="time-lock-toggle" name="enable_time_lock" style="cursor: pointer; width: 18px; height: 18px;">
+                        <span>🔒 Time-Lock this entry (optional)</span>
+                    </label>
+                    <div id="time-lock-field" style="display: none; margin-top: 0.5rem;">
+                        <label for="release_date">Release Date & Time</label>
+                        <input type="datetime-local" id="release_date" name="release_date" style="width: 100%; padding: 0.75rem; background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-primary); border-radius: 4px;">
+                    </div>
+                </div>
+
                 <div class="submit-block">
                     <button type="submit" class="btn btn-primary">
                         <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -65,6 +77,28 @@
 </div>
 
 <script>
-    // Any additional dashboard scripts can go here
+    // Toggle time-lock field visibility
+    const timeLockToggle = document.getElementById('time-lock-toggle');
+    const timeLockField = document.getElementById('time-lock-field');
+    
+    if (timeLockToggle) {
+        timeLockToggle.addEventListener('change', function() {
+            timeLockField.style.display = this.checked ? 'block' : 'none';
+        });
+    }
+
+    // Form validation to ensure release_date is provided when time-lock is enabled
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            if (timeLockToggle && timeLockToggle.checked) {
+                const releaseDate = document.getElementById('release_date').value;
+                if (!releaseDate) {
+                    e.preventDefault();
+                    alert('Please select a release date for time-locked entries');
+                }
+            }
+        });
+    }
 </script>
 {% endblock %}

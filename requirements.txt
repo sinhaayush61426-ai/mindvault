@@ -1,3 +1,29 @@
+# ================================
+# MindVault v2.0 - Python Dependencies
+# ================================
+#
+# Purpose: Core and optional packages for MindVault
+#
+# Core Framework:
+#   - Flask: Web framework
+#   - Flask-SQLAlchemy: ORM for database
+#   - Flask-Login: Session management
+#   - Flask-Bcrypt: Password hashing
+#
+# Security & Encryption:
+#   - cryptography: Fernet cipher for entry encryption
+#
+# Utilities:
+#   - Pillow: Image processing for PWA icons
+#   - python-dotenv: Environment variable loading
+#
+# Development:
+#   - jupyter: Interactive notebooks
+#   - ipython: Enhanced Python shell
+#
+# Last Modified: June 1, 2026
+#
+
 anyio==4.12.1
 argon2-cffi==25.1.0
 argon2-cffi-bindings==25.1.0
