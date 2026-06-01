@@ -302,6 +302,25 @@ class SnapshotManager {
   }
 }
 
+// --- FLASH MESSAGE AUTO-DISMISS ---
+function setupFlashMessageDismissal() {
+  const flashMessages = document.querySelectorAll('.flash');
+  
+  flashMessages.forEach(flash => {
+    // Automatically remove flash message after 3-4 seconds
+    setTimeout(() => {
+      flash.style.opacity = '0';
+      flash.style.transform = 'translateX(420px)';
+      flash.style.transition = 'all 0.3s ease';
+      
+      // Remove from DOM after animation completes
+      setTimeout(() => {
+        flash.remove();
+      }, 300);
+    }, 3500); // 3.5 seconds
+  });
+}
+
 // --- BIOMETRIC AUTH UI ---
 function setupBiometricUI() {
   const deviceInfo = biometricAuth.getDeviceInfo();
@@ -325,6 +344,9 @@ function setupBiometricUI() {
 
 // --- GLOBAL INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
+  // Setup Flash Message Auto-Dismiss
+  setupFlashMessageDismissal();
+
   // Register Service Worker
   registerServiceWorker();
 
