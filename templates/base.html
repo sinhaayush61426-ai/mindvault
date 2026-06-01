@@ -75,18 +75,7 @@
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="flash flash-{{ category }}" style="
-                        position: fixed;
-                        top: 100px;
-                        right: 20px;
-                        padding: 1rem 1.5rem;
-                        background: {% if category == 'error' %}rgba(255, 0, 122, 0.12){% else %}rgba(0, 242, 255, 0.12){% endif %};
-                        border: 1px solid {% if category == 'error' %}var(--clr-pink){% else %}var(--clr-cyan){% endif %};
-                        border-radius: 8px;
-                        color: {% if category == 'error' %}var(--clr-pink){% else %}var(--clr-cyan){% endif %};
-                        z-index: 10000;
-                        animation: slideIn 0.3s ease;
-                    ">
+                    <div class="flash flash-{{ category }}">
                         {{ message }}
                     </div>
                 {% endfor %}
@@ -113,12 +102,5 @@
     <!-- Scripts -->
     <script src="{{ url_for('static', filename='js/biometric-auth.js') }}"></script>
     <script src="{{ url_for('static', filename='js/enhanced-main.js') }}"></script>
-
-    <style>
-        @keyframes slideIn {
-            from { transform: translateX(400px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-    </style>
 </body>
 </html>

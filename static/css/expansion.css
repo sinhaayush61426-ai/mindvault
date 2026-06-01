@@ -199,6 +199,41 @@
     margin-bottom: var(--spacing-sm);
 }
 
+/* --- FLASH MESSAGES --- */
+.flash {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    z-index: 10000;
+    animation: slideIn 0.3s ease;
+    max-width: 400px;
+}
+
+.flash.flash-success {
+    background: rgba(0, 242, 255, 0.12);
+    border: 1px solid var(--clr-cyan);
+    color: var(--clr-cyan);
+}
+
+.flash.flash-error {
+    background: rgba(255, 0, 122, 0.12);
+    border: 1px solid var(--clr-pink);
+    color: var(--clr-pink);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
 .character-archetype {
     font-size: 0.85rem;
     color: var(--text-muted);
