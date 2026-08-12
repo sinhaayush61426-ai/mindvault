@@ -20,7 +20,7 @@
 
 | Badge | Details |
 |-------|---------|
-| ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) | Open source under MIT license |
+| ![License](https://img.shields.io/badge/License-Apache_2.0-yellow.svg)| Open source under Apache 2.0 license |
 | ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white) | Backend runtime |
 | ![Flask](https://img.shields.io/badge/Flask-3.1.3-000000?logo=flask&logoColor=white) | Web framework with 25+ routes |
 | ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?logo=javascript&logoColor=black) | Frontend interactivity |
@@ -1487,7 +1487,7 @@ We're **NOT** seeking VC funding or advertising. MindVault remains independent.
 
 ## License
 
-**MIT License** — See [LICENSE](./LICENSE) file
+**Apache 2.0 License** — See [LICENSE](./LICENSE) file
 
 ### Key Terms
 - [YES] Use for personal projects
