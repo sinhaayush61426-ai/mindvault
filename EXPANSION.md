@@ -30,7 +30,7 @@ Zen Mode hides surrounding navigation and shows live word and character counts w
 
 MindVault provides a web manifest and a service worker that caches static application assets and an offline fallback page. The fallback explains that new edits are not saved while offline. The service worker does not provide offline entry editing or automatic synchronization.
 
-Installability and available browser features vary by platform. The manifest's shortcuts are convenience links and do not replace normal sign-in and authorization checks.
+Installability and available browser features vary by platform. The app opens at its home page and requires normal sign-in and authorization.
 
 ## Visual system
 

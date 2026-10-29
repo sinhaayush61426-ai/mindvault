@@ -8,7 +8,6 @@
     <meta name="description" content="MindVault - A private workspace for encrypted writing and creative projects">
     <link rel="manifest" href="{% url 'manifest' %}">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%2379a8ff'>🔐</text></svg>">
-    <link rel="apple-touch-icon" href="{% static 'images/icon-192x192.png' %}">
     <title>{% block title %}MindVault{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/expansion.css' %}">
@@ -108,7 +107,6 @@
     </script>
 
     <!-- Scripts -->
-    <script src="{% static 'js/biometric-auth.js' %}"></script>
     <script src="{% static 'js/enhanced-main.js' %}"></script>
 </body>
 </html>

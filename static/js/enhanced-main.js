@@ -378,27 +378,6 @@ function setupFlashMessageDismissal() {
   });
 }
 
-// --- BIOMETRIC AUTH UI ---
-function setupBiometricUI() {
-  const deviceInfo = biometricAuth.getDeviceInfo();
-  
-  if (deviceInfo.webauthnSupported) {
-    const bioContainer = document.getElementById('biometric-container');
-    if (bioContainer) {
-      let methodText = 'Biometric';
-      if (deviceInfo.faceIdSupported) methodText = 'Face ID';
-      if (deviceInfo.touchIdSupported) methodText = 'Touch ID';
-
-      bioContainer.innerHTML = `
-        <p style="color: var(--text-muted); margin-bottom: 1rem;">Or use ${methodText}</p>
-        <button type="button" id="biometric-login-btn" class="btn btn-secondary" style="display: none; width: 100%;">
-          🔐 ${methodText} Login
-        </button>
-      `;
-    }
-  }
-}
-
 // --- GLOBAL INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
   // Setup Flash Message Auto-Dismiss
@@ -422,9 +401,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize Snapshot Manager
   const snapshotMgr = new SnapshotManager();
   window.snapshotMgr = snapshotMgr;
-
-  // Setup Biometric UI
-  setupBiometricUI();
 
   // Log app version
   console.log('✓ MindVault v2.0 Loaded with PWA support');

@@ -61,7 +61,7 @@ mindvault/                Settings, root URLs, and WSGI application
 vault/                    Models, forms, auth backend, views, and migrations
 templates/                Server-rendered pages and error pages
 static/css/               Blue-and-pink responsive styles
-static/js/                Editor behavior, authentication UI, and PWA service worker
+static/js/                Editor behavior and PWA service worker
 security.py               Fernet encryption helpers
 instance/mindvault.db     Local SQLite database (not committed)
 ```

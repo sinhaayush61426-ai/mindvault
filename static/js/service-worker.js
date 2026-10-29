@@ -1,15 +1,13 @@
 // MindVault Service Worker
 // Caches the application shell and provides an offline fallback.
 
-const CACHE_NAME = 'mindvault-v3';
+const CACHE_NAME = 'mindvault-v4';
 const STATIC_ASSETS = [
   '/manifest.json',
   '/service-worker.js',
   '/static/css/style.css',
   '/static/css/expansion.css',
-  '/static/js/main.js',
   '/static/js/enhanced-main.js',
-  '/static/js/biometric-auth.js',
   '/static/svg-icons.html',
   '/offline.html'
 ];
@@ -84,50 +82,6 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Push Notification event
-self.addEventListener('push', (event) => {
-  const data = event.data ? event.data.json() : {};
-  const options = {
-    body: data.body || 'MindVault notification',
-    icon: '/static/images/icon-192x192.png',
-    badge: '/static/images/badge-72x72.png',
-    tag: 'mindvault-notification',
-    requireInteraction: false,
-    actions: [
-      { action: 'open', title: 'Open' },
-      { action: 'dismiss', title: 'Dismiss' }
-    ]
-  };
-
-  event.waitUntil(
-    self.registration.showNotification(data.title || 'MindVault', options)
-  );
-});
-
-// Notification click event
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-  
-  if (event.action === 'dismiss') {
-    return;
-  }
-
-  event.waitUntil(
-    clients.matchAll({ type: 'window' }).then((clientList) => {
-      // Check if there's already a window open
-      for (let i = 0; i < clientList.length; i++) {
-        const client = clientList[i];
-        if (client.url === '/' && 'focus' in client) {
-          return client.focus();
-        }
-      }
-      // Otherwise, open a new window
-      if (clients.openWindow) {
-        return clients.openWindow('/');
-      }
-    })
-  );
-});
 
 // Message handler for client communication
 self.addEventListener('message', (event) => {

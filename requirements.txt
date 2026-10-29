@@ -2,4 +2,3 @@ Django>=5.2,<6.0
 bcrypt>=4.2,<6.0
 cryptography>=44,<47
 python-dotenv>=1.0,<2.0
-Pillow>=10,<13
