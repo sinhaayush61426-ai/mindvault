@@ -9,6 +9,7 @@
             <h2 class="section-title gradient-text">Public Testimony</h2>
             <p class="section-copy">Share your experience with the Vault and help others discover the sanctuary.</p>
             <form method="POST">
+                {% csrf_token %}
                 <div class="form-field">
                     <label for="author_name">Full Name</label>
                     <input id="author_name" type="text" name="author_name" placeholder="Full Name" required>

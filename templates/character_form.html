@@ -9,9 +9,10 @@
 
         <div class="glass-panel form-card">
             <form method="POST">
+                {% csrf_token %}
                 <div class="form-field">
                     <label for="name">Character Name *</label>
-                    <input type="text" id="name" name="name" value="{{ character.name if character else '' }}" required placeholder="e.g., Aria Nightshade">
+                    <input type="text" id="name" name="name" value="{{ character.name|default:'' }}" required placeholder="e.g., Aria Nightshade">
                 </div>
 
                 <div class="form-field">
@@ -27,32 +28,32 @@
 
                 <div class="form-field">
                     <label for="personality_traits">Personality Traits</label>
-                    <textarea id="personality_traits" name="personality_traits" placeholder="e.g., Mysterious, Strategic, Loyal, Ambitious">{{ character.personality_traits if character else '' }}</textarea>
+                    <textarea id="personality_traits" name="personality_traits" placeholder="e.g., Mysterious, Strategic, Loyal, Ambitious">{{ character.personality_traits|default:'' }}</textarea>
                 </div>
 
                 <div class="form-field">
                     <label for="backstory">Backstory</label>
-                    <textarea id="backstory" name="backstory" placeholder="Character's history and origin...">{{ character.backstory if character else '' }}</textarea>
+                    <textarea id="backstory" name="backstory" placeholder="Character's history and origin...">{{ character.backstory|default:'' }}</textarea>
                 </div>
 
                 <div class="form-field">
                     <label for="physical_description">Physical Description</label>
-                    <textarea id="physical_description" name="physical_description" placeholder="Height, build, features, clothing style...">{{ character.physical_description if character else '' }}</textarea>
+                    <textarea id="physical_description" name="physical_description" placeholder="Height, build, features, clothing style...">{{ character.physical_description|default:'' }}</textarea>
                 </div>
 
                 <div class="form-field">
                     <label for="motivations">Motivations & Goals</label>
-                    <textarea id="motivations" name="motivations" placeholder="What drives this character?">{{ character.motivations if character else '' }}</textarea>
+                    <textarea id="motivations" name="motivations" placeholder="What drives this character?">{{ character.motivations|default:'' }}</textarea>
                 </div>
 
                 <div class="form-field">
                     <label for="relationships">Key Relationships</label>
-                    <textarea id="relationships" name="relationships" placeholder="How does this character relate to others? (JSON format: {&quot;character&quot;:&quot;relationship&quot;})">{{ character.relationships if character else '' }}</textarea>
+                    <textarea id="relationships" name="relationships" placeholder="How does this character relate to others? (JSON format: {&quot;character&quot;:&quot;relationship&quot;})">{{ character.relationships|default:'' }}</textarea>
                 </div>
 
                 <div class="form-field">
                     <label for="avatar_color">Avatar Color</label>
-                    <input type="color" id="avatar_color" name="avatar_color" value="{{ character.avatar_color if character else '#5DADE2' }}" style="width: 60px; height: 40px; cursor: pointer;">
+                    <input type="color" id="avatar_color" name="avatar_color" value="{{ character.avatar_color|default:'#5DADE2' }}" style="width: 60px; height: 40px; cursor: pointer;">
                 </div>
 
                 <div class="submit-block" style="display: flex; gap: 1rem;">
@@ -63,7 +64,7 @@
                         </svg>
                         {% if character %}Update Character{% else %}Create Character{% endif %}
                     </button>
-                    <a href="{{ url_for('characters') }}" class="btn btn-secondary" style="flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                    <a href="{% url 'characters' %}" class="btn btn-secondary" style="flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
                         <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M19 12H5M12 19l-7-7 7-7"></path>
                         </svg>

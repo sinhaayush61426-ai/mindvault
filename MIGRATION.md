@@ -1,290 +1,52 @@
-# MindVault v2.0 Migration Guide
+# Existing Database Adoption
 
-## For Existing Users
+MindVault uses Django for request handling, authentication, sessions, templates, database access, and schema migrations. Existing installations can keep using `instance/mindvault.db`.
 
-### What You Need to Do
+## Adopt an existing database
 
-**Almost Nothing!** MindVault v2.0 is fully backward compatible. Your existing entries and account are completely safe and unchanged.
+1. Stop the application and make a backup before changing the schema:
 
-### What Happens Automatically
-
-1. **Character Matrix**: New empty matrix created for you (no action needed)
-2. **Service Worker**: Automatically installs on first use
-3. **Draft Auto-Save**: Starts saving your drafts automatically
-4. **PWA**: Can install anytime from browser menu
-5. **Biometric**: Optionally set up on login/register
-
-### Breaking Changes
-
-**None!** All existing features work exactly as before.
-
----
-
-## For Developers / Self-Hosted Instances
-
-### Database Migration
-
-New tables required:
-
-```bash
-# These are created automatically on first run
-# But you can pre-create if needed:
-
-cd /path/to/mindvault
-python3
->>> from app import app, db
->>> app.app_context().push()
->>> db.create_all()
->>> exit()
-```
-
-### File Changes
-
-**New files to deploy:**
-```
-manifest.json
-templates/
-  - characters.html
-  - character_form.html
-  - snapshots.html
-  - view_entry.html
-  - offline.html
-static/css/
-  - expansion.css
-static/js/
-  - service-worker.js
-  - biometric-auth.js
-  - enhanced-main.js
-static/
-  - svg-icons.html
-```
-
-**Modified files:**
-```
-app.py                (new models + routes)
-templates/base.html   (new links + scripts)
-static/css/style.css  (new CSS variables)
-```
-
-### Installation Steps for Fresh/Existing Deploy
-
-1. **Backup existing database** (if upgrading)
    ```bash
    cp instance/mindvault.db instance/mindvault.db.backup
    ```
 
-2. **Update code**
+2. Keep the existing `ENCRYPTION_KEY`. A different key cannot decrypt existing entries and snapshots.
+3. Configure `SECRET_KEY`, `ENCRYPTION_KEY`, and `DATABASE_PATH` in `.env`, then install the project dependencies.
+4. Confirm the database path points to the backed-up vault and that the expected application tables are present.
+5. Adopt the initial schema and apply later changes:
+
    ```bash
-   git pull origin main
-   # or update files manually
+   python manage.py migrate --fake-initial
    ```
 
-3. **Create new tables**
+6. Verify the application and launch it:
+
    ```bash
-   python3 -c "
-   from app import app, db
-   app.app_context().push()
-   db.create_all()
-   print('✓ Database ready')
-   "
+   python manage.py check
+   python manage.py test
+   python manage.py runserver
    ```
 
-4. **Test application**
-   ```bash
-   python3 app.py
-   # Visit http://localhost:5000
-   # Test features: Characters, Snapshots, Zen Mode
-   ```
+The initial migration recognizes the existing `user`, `diary_entry`, `entry_snapshot`, `character`, `review`, and `future_letter` tables. Follow-up migrations add entry title, category, release date, time-lock, and draft fields without replacing encrypted content. Existing bcrypt password hashes remain usable and are upgraded after a successful login.
 
-5. **Install PWA (mobile testing)**
-   - Use DevTools device emulation
-   - Or test on actual mobile device
+`--fake-initial` is safe only when all tables in the initial migration already exist with compatible columns. If a table is missing or has a different schema, stop and investigate before applying migrations. Do not delete the database or run a second application version against a database after its schema has changed.
 
-### Environment Variables (No Changes)
+For additional confidence, test adoption on a separate copy of the database first. Keep the backup until you have verified account access, entry counts, and decryption with the original encryption key.
 
-Continue using existing `.env` or configuration:
-```
-SECRET_KEY=your_key
-DATABASE_URL=sqlite:///mindvault.db  # unchanged
-DEBUG=False  # recommended for production
-```
-
-### Breaking API Changes
-
-**None!** Existing API routes remain unchanged:
-- `/` - homepage
-- `/login`, `/register` - authentication
-- `/dashboard` - vault view
-- `/save-entry` - create entry
-
-**New routes added** (non-breaking):
-- `/characters` - character management
-- `/character/new`, `/edit`, `/delete` - CRUD operations
-- `/entry/<id>/snapshot` - create version
-- `/entry/<id>/snapshots` - view versions
-- `/entry/<id>` - view entry detail
-
-### Dependency Changes
-
-**No new dependencies!** All new features use:
-- **Backend**: Existing Flask/SQLAlchemy
-- **Frontend**: Browser APIs (Service Workers, Web Authentication, IndexedDB)
-
-All expansions use zero external JavaScript libraries.
-
-### Rollback Plan (If Issues)
-
-If you need to revert to v1.0:
+## Fresh installations
 
 ```bash
-# Preserve new data
-cp instance/mindvault.db instance/mindvault-v2.db
-
-# Restore old version
-git checkout v1.0
-# or restore files from backup
-
-# Old database still works (new tables ignored)
-python3 app.py
+pip install -r requirements.txt
+cp .env.example .env
+# Configure a strong SECRET_KEY and a valid Fernet ENCRYPTION_KEY.
+python manage.py migrate
+python manage.py runserver
 ```
 
-The application will function normally without new features but v2.0 data is safely stored.
+## Recovery
 
----
+If adoption fails, stop the application and restore the backup made before migration. Keep the original encryption key. Do not attempt to repair a partially changed vault by deleting tables or regenerating the key.
 
-## Troubleshooting Migration
+## Routes retained
 
-### Issue: "No such table: character"
-
-**Solution**: Database schema not updated
-```python
-from app import app, db
-with app.app_context():
-    db.create_all()
-```
-
-### Issue: Service Worker not loading
-
-**Solution**: 
-- Clear browser cache: DevTools → Application → Clear site data
-- Check `/static/js/service-worker.js` exists
-- Verify HTTPS/localhost (required for Service Workers)
-
-### Issue: Characters page shows 404
-
-**Solution**:
-- Confirm `app.py` has been updated with character routes
-- Check `/characters` route exists: `grep "def characters" app.py`
-- Restart Flask application
-
-### Issue: Manifest not found
-
-**Solution**:
-- Verify `manifest.json` exists in project root
-- Check `base.html` link tag: `<link rel="manifest" href="{{ url_for('static', filename='../manifest.json') }}">`
-- Manifest must be web-accessible at `/manifest.json`
-
-### Issue: Existing entries not visible
-
-**Solution**:
-- Old entries still exist in database
-- Check user is logged in to same account
-- Verify `DiaryEntry` table not corrupted (backup + restore if needed)
-
----
-
-## Performance Considerations
-
-### New Feature Impact
-
-| Feature | Storage | Load Latency | Notes |
-|---------|---------|--------------|-------|
-| Character Matrix | ~5KB per character | <50ms | Minimal |
-| Snapshots | Varies (duplicates content) | <10ms | Plan for storage |
-| Zen Mode | 0 additional storage | Instant | Pure CSS |
-| PWA/Service Worker | ~100KB cache | First load only | Improves on repeat |
-| Biometric Auth | 0 server storage | Instant | Device-native |
-
-### Recommendations
-
-1. **Database Size**: Each snapshot duplicates encrypted entry content
-   - Typical: 100 entries × 5 snapshots each = moderate growth
-   - Monitor `database.db` size
-   - Plan backup strategy
-
-2. **Browser Cache**: Service Worker caches ~100KB of assets
-   - Should be fine for most modern devices
-   - Consider target device specifications
-
-3. **Auto-Save**: Triggers every 30 seconds
-   - Light operation (LocalStorage write)
-   - Browser throttling handles optimization automatically
-
----
-
-## Feature Enablement
-
-All v2.0 features are enabled by default. To disable specific features, modify `base.html`:
-
-### Disable Zen Mode
-```html
-<!-- Comment out in base.html -->
-<!-- <script src="{{ url_for('static', filename='js/enhanced-main.js') }}"></script> -->
-```
-
-### Disable Service Worker
-```javascript
-// In enhanced-main.js, comment out:
-// registerServiceWorker();
-```
-
-### Disable Biometric Auth
-```html
-<!-- Remove from base.html -->
-<!-- <script src="{{ url_for('static', filename='js/biometric-auth.js') }}"></script> -->
-```
-
-### Disable Character Matrix
-```python
-# In app.py, comment out character routes:
-# @app.route('/characters')
-# def characters():
-```
-
----
-
-## Production Checklist
-
-Before deploying v2.0 to production:
-
-- [ ] Database properly migrated with new tables
-- [ ] All new files deployed to server
-- [ ] SSL/HTTPS enabled (required for Service Workers)
-- [ ] Manifest URL accessible at `/manifest.json`
-- [ ] Service Worker script accessible at `/static/js/service-worker.js`
-- [ ] Existing user data backed up
-- [ ] Tested character creation/editing
-- [ ] Tested snapshot restoration
-- [ ] Tested Zen Mode on intended browsers
-- [ ] PWA installs correctly on mobile
-- [ ] Biometric auth tested on supported device
-- [ ] Network offline scenarios tested
-- [ ] Performance acceptable on target devices
-- [ ] No console errors or warnings
-
----
-
-## Support
-
-For migration issues:
-1. Check this guide and EXPANSION.md
-2. Review application logs: `tail -f app.log`
-3. Check browser console for JavaScript errors
-4. Verify database integrity: `sqlite3 database.db "PRAGMA integrity_check;"`
-
----
-
-**Upgrade Version**: 1.0 → 2.0  
-**Estimated Time**: <5 minutes  
-**Complexity**: Low  
-**Risk**: None (fully backward compatible)
+The existing page URLs remain available: `/`, `/register`, `/login`, `/logout`, `/dashboard`, `/seal-letter`, `/entry/<id>`, `/entry/<id>/edit`, `/entry/<id>/snapshots`, `/entry/<id>/snapshot`, `/snapshot/<id>/restore`, `/characters`, `/character/new`, `/character/<id>/edit`, `/character/<id>/delete`, and `/submit-review`.

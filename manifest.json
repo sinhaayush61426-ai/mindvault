@@ -1,24 +1,24 @@
 {
   "name": "MindVault - Secure Sanctuary",
   "short_name": "MindVault",
-  "description": "A high-intensity workspace for secure reflections, professional research analysis, and creative fiction projects with zero-knowledge encryption.",
+  "description": "A private workspace for encrypted writing, research, and creative projects.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#050608",
-  "theme_color": "#00f2ff",
+  "background_color": "#080d1a",
+  "theme_color": "#79a8ff",
   "prefer_related_applications": false,
   "categories": ["productivity", "utilities"],
   "screenshots": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23050608' width='192' height='192'/><text x='50%' y='50%' font-size='80' fill='%2300f2ff' text-anchor='middle' dominant-baseline='middle' font-family='sans-serif' font-weight='bold'>MV</text></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23080d1a' width='192' height='192'/><text x='50%' y='50%' font-size='80' fill='%2379a8ff' text-anchor='middle' dominant-baseline='middle' font-family='sans-serif' font-weight='bold'>MV</text></svg>",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "form_factor": "narrow"
     },
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%23050608' width='512' height='512'/><text x='50%' y='50%' font-size='200' fill='%2300f2ff' text-anchor='middle' dominant-baseline='middle' font-family='sans-serif' font-weight='bold'>MV</text></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%23080d1a' width='512' height='512'/><text x='50%' y='50%' font-size='200' fill='%2379a8ff' text-anchor='middle' dominant-baseline='middle' font-family='sans-serif' font-weight='bold'>MV</text></svg>",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "form_factor": "wide"
@@ -26,19 +26,19 @@
   ],
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23050608' width='192' height='192'/><g fill='%2300f2ff' opacity='0.8'><rect x='48' y='48' width='96' height='96' rx='8'/><circle cx='96' cy='96' r='24'/></g></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23080d1a' width='192' height='192'/><g fill='%2379a8ff' opacity='0.8'><rect x='48' y='48' width='96' height='96' rx='8'/><circle cx='96' cy='96' r='24'/></g></svg>",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%23050608' width='512' height='512'/><g fill='%2300f2ff' opacity='0.8'><rect x='128' y='128' width='256' height='256' rx='20'/><circle cx='256' cy='256' r='64'/></g></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%23080d1a' width='512' height='512'/><g fill='%2379a8ff' opacity='0.8'><rect x='128' y='128' width='256' height='256' rx='20'/><circle cx='256' cy='256' r='64'/></g></svg>",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%2300f2ff' width='512' height='512'/><g fill='%23050608' opacity='0.8'><rect x='128' y='128' width='256' height='256' rx='20'/><circle cx='256' cy='256' r='64'/></g></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%2379a8ff' width='512' height='512'/><g fill='%23080d1a' opacity='0.8'><rect x='128' y='128' width='256' height='256' rx='20'/><circle cx='256' cy='256' r='64'/></g></svg>",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "maskable"

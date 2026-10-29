@@ -11,6 +11,7 @@
             <h2 class="section-title gradient-text">Initialize New Vault</h2>
             <p class="section-copy">Create your secure account and begin storing locked knowledge.</p>
             <form method="POST">
+                {% csrf_token %}
                 <div class="form-field">
                     <label for="username">Identifier</label>
                     <input id="username" type="text" name="username" placeholder="Username" required>
@@ -39,11 +40,11 @@
             
             <div style="margin-top: 2rem; text-align: center; border-top: 1px solid var(--border); padding-top: 1.5rem;">
                 <p class="text-muted" style="margin-bottom: 1rem;">Already have an account?</p>
-                <a href="{{ url_for('login') }}" class="btn btn-secondary" style="text-decoration: none; display: inline-block;">Login Here</a>
+                <a href="{% url 'login' %}" class="btn btn-secondary" style="text-decoration: none; display: inline-block;">Login Here</a>
             </div>
             
             <div style="margin-top: 1rem; text-align: center;">
-                <a href="{{ url_for('home') }}" style="color: var(--clr-cyan); text-decoration: none; font-size: 0.9rem;">← Back to Home</a>
+                <a href="{% url 'home' %}" style="color: var(--clr-cyan); text-decoration: none; font-size: 0.9rem;">← Back to Home</a>
             </div>
         </div>
     </div>

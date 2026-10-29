@@ -8,9 +8,11 @@
         <h1 class="section-title gradient-text" style="margin-bottom: 2rem;">Edit Entry</h1>
 
         <div class="glass-panel form-card">
-            <form action="{{ url_for('edit_entry', entry_id=entry.id) }}" method="POST">
+            <form action="{% url 'edit_entry' entry_id=entry.id %}" method="POST" data-autosave-url="{% url 'autosave_entry' %}" data-entry-id="{{ entry.id }}">
+                {% csrf_token %}
                 <div class="form-field">
-                    <input type="text" name="title" value="{{ entry.title }}" placeholder="Entry Title..." style="background: transparent; border: none; color: #fff; font-size: 2.5rem; font-weight: 900; width: 100%; outline: none;" required>
+                    <label class="visually-hidden" for="entry-title">Entry title</label>
+                    <input class="entry-title-input" id="entry-title" type="text" name="title" value="{{ entry.title }}" placeholder="Entry title..." maxlength="100" required>
                 </div>
 
                 <div class="form-field">
@@ -25,20 +27,23 @@
                 </div>
 
                 <div class="form-field">
-                    <textarea name="content" placeholder="Update your entry..." required>{{ content }}</textarea>
+                    <label class="visually-hidden" for="entry-content">Entry content</label>
+                    <textarea id="entry-content" name="content" placeholder="Update your entry..." maxlength="1000000" required>{{ content }}</textarea>
                 </div>
 
-                <div class="submit-block" style="display: flex; gap: 1rem;">
+                <div class="submit-block entry-actions">
+                    <button id="zen-toggle" type="button" class="btn btn-secondary">Focus mode</button>
                     <button type="submit" class="btn btn-primary">
                         <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M19 12H5M12 19l-7-7 7-7"></path>
                         </svg>
                         Save Changes
                     </button>
-                    <a href="{{ url_for('view_entry', entry_id=entry.id) }}" class="btn btn-secondary" style="text-decoration: none;">
+                    <a href="{% url 'view_entry' entry_id=entry.id %}" class="btn btn-secondary" style="text-decoration: none;">
                         Cancel
                     </a>
                 </div>
+                <p class="autosave-status" id="save-indicator" role="status" aria-live="polite">Automatic saves require a connection; entry text is encrypted before storage.</p>
             </form>
         </div>
     </div>

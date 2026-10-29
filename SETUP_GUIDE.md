@@ -1,132 +1,62 @@
-# 🚀 MindVault Setup Guide - Quick Start
+# MindVault Setup
 
-**Problem Found:** Missing Python dependencies (Flask, Flask-Login, etc.)
+## Requirements
 
----
+- Python 3.10+
+- SQLite 3
 
-## ✅ Solution: Install Dependencies
-
-### Step 1: Install Required Packages
-
-Run this command in your terminal:
+## Install
 
 ```bash
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
+cp .env.example .env
 ```
 
-**What it does:**
-- Installs Flask web framework
-- Installs Flask-SQLAlchemy (database ORM)
-- Installs Flask-Login (session management)
-- Installs Flask-Bcrypt (password hashing)
-- Installs cryptography (encryption)
-- Plus 30+ other dependencies
+Set `SECRET_KEY` and `ENCRYPTION_KEY` in `.env`. For an existing vault, use the same `ENCRYPTION_KEY` that encrypted its entries; changing it makes existing content unreadable.
 
-**Time required:** 2-5 minutes (depending on internet speed)
-
-### Step 2: Verify Installation
+Generate keys with:
 
 ```bash
-python3 -c "import flask; print(f'✅ Flask {flask.__version__} installed')"
+python -c "import secrets; print(secrets.token_urlsafe(50))"
+python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
 ```
 
-**Expected output:** `✅ Flask 3.1.3 installed`
+## Database and startup
 
-### Step 3: Run the Application
+The default SQLite file is `instance/mindvault.db`; override it with `DATABASE_PATH`.
+
+For an existing installation, stop the running server, make a backup of the database, then adopt the existing tables and add Django's schema:
 
 ```bash
-python3 app.py
+cp instance/mindvault.db instance/mindvault.db.backup
+python manage.py migrate --fake-initial
 ```
 
-**Expected output:**
-```
- * Serving Flask app 'app'
- * Debug mode: on
- * Running on http://127.0.0.1:5000
-```
+The initial migration matches the existing `user`, `diary_entry`, `entry_snapshot`, `character`, `review`, and `future_letter` tables. Follow-up migrations add entry title, category, time-lock, and draft fields. Existing bcrypt password hashes are verified at login and upgraded to Django's password hashing format after successful authentication.
 
----
+For a fresh install, run:
 
-## 📋 Missing Dependencies Error Explained
-
-**Error:** `ModuleNotFoundError: No module named 'flask_login'`
-
-**Cause:** Python can't find the Flask-Login package
-
-**Why it happened:**
-1. Fresh workspace/installation
-2. Dependencies not yet installed
-3. Virtual environment not activated (if using one)
-
-**Fixed by:** Running `pip install -r requirements.txt`
-
----
-
-## 🎯 Core Dependencies
-
-| Package | Version | Purpose |
-|---------|---------|---------|
-| Flask | 3.1.3 | Web framework |
-| Flask-SQLAlchemy | 3.1.1 | Database ORM |
-| Flask-Login | 0.6.3 | Session management |
-| Flask-Bcrypt | 1.0.1 | Password hashing |
-| cryptography | 42.0.2 | Fernet encryption |
-| Pillow | 10.0.0 | Image processing |
-
----
-
-## ⚠️ Common Issues
-
-### Issue: "pip command not found"
-**Solution:** Use `pip3` instead:
 ```bash
-pip3 install -r requirements.txt
+python manage.py migrate
 ```
 
-### Issue: "Permission denied"
-**Solution:** Add `--user` flag:
+Then start the development server:
+
 ```bash
-pip install --user -r requirements.txt
+python manage.py check
+python manage.py runserver
 ```
 
-### Issue: Takes very long to install
-**Solution:** This is normal for first install. Be patient or use `-q` for quiet mode:
+Open <http://127.0.0.1:8000>.
+
+## Tests
+
 ```bash
-pip install -q -r requirements.txt
+python manage.py test
 ```
 
----
+## Production
 
-## ✅ After Installation
-
-Once dependencies are installed:
-
-1. ✅ Run `python3 app.py`
-2. ✅ Open `http://127.0.0.1:5000` in browser
-3. ✅ Register a new account
-4. ✅ Start creating encrypted entries
-
----
-
-## 📚 Additional Help
-
-**In terminal, to see what's installed:**
-```bash
-pip list | grep -i flask
-```
-
-**To uninstall and start fresh:**
-```bash
-pip uninstall -r requirements.txt -y
-pip install -r requirements.txt
-```
-
-**To check specific package:**
-```bash
-python3 -c "import flask_login; print('✅ Flask-Login installed')"
-```
-
----
-
-**Status:** 🟢 Ready to install  
-**Time to fix:** < 5 minutes
+Set `DEBUG=False`, a unique high-entropy `SECRET_KEY`, the existing vault's `ENCRYPTION_KEY`, `ALLOWED_HOSTS`, `SESSION_COOKIE_SECURE=True`, and `CSRF_COOKIE_SECURE=True`. Run `python manage.py collectstatic` and serve the collected assets from `staticfiles/`. Serve the Django WSGI application at `mindvault.wsgi:application` behind an HTTPS-terminating production server. Do not use `runserver` in production.

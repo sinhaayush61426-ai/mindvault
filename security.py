@@ -1,48 +1,30 @@
-"""
-================================
-SECURITY UTILITIES - MindVault
-================================
+"""Fernet encryption helpers for MindVault entry and snapshot content."""
 
-Purpose:
-  Centralized security functions for encryption, password hashing,
-  and authentication helpers for MindVault.
-
-Functions:
-  - VaultSecurity class: Encryption/decryption wrapper for Fernet cipher
-  - Password validation and hashing utilities
-  - Session management helpers
-  - CSRF token generation
-
-Encryption:
-  - Algorithm: Fernet (AES-128-CBC with HMAC)
-  - Key Format: Base64-encoded 32-byte key
-  - Usage: All user diary entries encrypted before database storage
-
-Password Security:
-  - Hashing: bcrypt with 12 rounds
-  - Never: Plaintext passwords stored or logged
-  - Validation: Enforced on registration and login
-
-Last Modified: May 2026
-Status: Production Ready
-"""
-
-from cryptography.fernet import Fernet
 import os
 
-# In a real hackathon, you'd store this in a .env file
-# For now, we generate a key. Keep this safe!
+from cryptography.fernet import Fernet
+from django.core.exceptions import ImproperlyConfigured
+
+
 def generate_key():
     return Fernet.generate_key()
 
+
 class VaultSecurity:
-    def __init__(self, key):
-        self.cipher = Fernet(key)
+    def __init__(self, key=None):
+        configured_key = key or os.environ.get("ENCRYPTION_KEY")
+        if not configured_key:
+            raise ImproperlyConfigured(
+                "Set ENCRYPTION_KEY to the Fernet key for this vault."
+            )
+        if isinstance(configured_key, str):
+            configured_key = configured_key.encode("ascii")
+        self.cipher = Fernet(configured_key)
 
     def encrypt_text(self, plain_text):
-        """Turns human-readable text into a scrambled byte string"""
-        return self.cipher.encrypt(plain_text.encode()).decode()
+        return self.cipher.encrypt(plain_text.encode("utf-8")).decode("ascii")
 
     def decrypt_text(self, encrypted_text):
-        """Turns scrambled text back into human-readable words"""
-        return self.cipher.decrypt(encrypted_text.encode()).decode()
+        if isinstance(encrypted_text, str):
+            encrypted_text = encrypted_text.encode("ascii")
+        return self.cipher.decrypt(encrypted_text).decode("utf-8")

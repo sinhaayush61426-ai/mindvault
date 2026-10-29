@@ -1,61 +1,28 @@
-🔴 **ERROR DIAGNOSIS & SOLUTION**
+# Troubleshooting
 
-**Error Message:**
-```
-ModuleNotFoundError: No module named 'flask_login'
-```
+## Missing Django or cryptography modules
 
-**Root Cause:** Python dependencies not installed
-
----
-
-## ✅ SOLUTION
-
-### Quick Fix (One Command)
+Install the project's dependencies in the active virtual environment:
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
-Then run:
+## Django system check or missing-table errors
+
+Run the migrations:
+
 ```bash
-python3 app.py
+python manage.py check
+python manage.py migrate
 ```
 
----
+For a pre-existing SQLite database, follow [MIGRATION.md](./MIGRATION.md) and use `python manage.py migrate --fake-initial` after making a backup.
 
-## 📊 What This Fixes
+## Existing entries cannot be decrypted
 
-| Dependency | Status Before | Status After |
-|---|---|---|
-| flask | ❌ Missing | ✅ Installed |
-| Flask-Login | ❌ Missing | ✅ Installed |
-| Flask-SQLAlchemy | ❌ Missing | ✅ Installed |
-| Flask-Bcrypt | ❌ Missing | ✅ Installed |
-| cryptography | ❌ Missing | ✅ Installed |
-| 30+ others | ❌ Missing | ✅ Installed |
+Set `ENCRYPTION_KEY` to the exact Fernet key that was used for the existing database. Do not generate a replacement key for a vault that already contains encrypted data.
 
----
+## Cannot log in to an existing account
 
-## 🎯 What Happens Next
-
-1. **Install runs** (~2-5 minutes)
-2. **All packages download** from PyPI
-3. **All packages compile** (if needed)
-4. **Installation completes** ✅
-5. **Run `python3 app.py`** to start
-6. **Open** http://127.0.0.1:5000 in browser
-
----
-
-## 📚 Reference Files
-
-- **[SETUP_GUIDE.md](SETUP_GUIDE.md)** - Detailed setup instructions
-- **[COMPREHENSIVE_AUDIT.md](COMPREHENSIVE_AUDIT.md)** - Updated with setup section
-- **[requirements.txt](requirements.txt)** - Full dependency list
-
----
-
-**Time to fix:** < 5 minutes  
-**Difficulty:** Easy  
-**Risk:** None
+Legacy bcrypt hashes are supported and upgraded after a successful login. Confirm the email and password are correct, and ensure the database path points to the original `instance/mindvault.db`.

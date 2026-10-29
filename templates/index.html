@@ -7,8 +7,8 @@
     <h1>MIND <span class="gradient-text">VAULT</span></h1>
     <p class="section-copy">A high-intensity workspace for secure reflections and professional research analysis.</p>
     <div class="btn-group">
-        <a href="{{ url_for('login') }}" class="btn btn-access">Access Vault</a>
-        <a href="{{ url_for('register') }}" class="btn btn-create">Create New Account</a>
+        <a href="{% url 'login' %}" class="btn btn-access">Access Vault</a>
+        <a href="{% url 'register' %}" class="btn btn-create">Create New Account</a>
     </div>
 </section>
 
@@ -17,8 +17,8 @@
         <div class="grid">
             <article class="card">
                 <div class="icon-container">🔒</div>
-                <h3>Zero-Knowledge AES</h3>
-                <p>No filler. Just raw, hardware-level encryption for your most sensitive data.</p>
+                <h3>Encrypted Entry Storage</h3>
+                <p>Protect journal content with Fernet encryption before it is stored.</p>
             </article>
 
             <article class="card">
@@ -51,13 +51,13 @@
     </div>
 </section>
 
-<section class="section" style="text-align: center; background: rgba(0, 242, 255, 0.05); padding: 3rem 0;">
+<section class="section" style="text-align: center; background: rgba(91, 145, 255, 0.05); padding: 3rem 0;">
     <div class="container">
         <h3 class="section-title" style="margin-bottom: 1.5rem;">Share Your Experience</h3>
         <p class="section-copy" style="margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
             Help other writers and researchers discover MindVault. Share your experience and testimonial.
         </p>
-        <a href="{{ url_for('submit_review') }}" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
+        <a href="{% url 'submit_review' %}" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
             <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                 <polyline points="16.5 1.5 20 5 16 9"></polyline>

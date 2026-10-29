@@ -11,6 +11,7 @@
             <h2 class="section-title gradient-text">Unlock Vault</h2>
             <p class="section-copy">Authenticate with your secure account and return to the sanctuary.</p>
             <form method="POST">
+                {% csrf_token %}
                 <div class="form-field">
                     <label for="email">Registered Email</label>
                     <input id="email" type="email" name="email" required>
@@ -34,11 +35,11 @@
             
             <div style="margin-top: 2rem; text-align: center; border-top: 1px solid var(--border); padding-top: 1.5rem;">
                 <p class="text-muted" style="margin-bottom: 1rem;">Don't have an account?</p>
-                <a href="{{ url_for('register') }}" class="btn btn-secondary" style="text-decoration: none; display: inline-block;">Create New Account</a>
+                <a href="{% url 'register' %}" class="btn btn-secondary" style="text-decoration: none; display: inline-block;">Create New Account</a>
             </div>
             
             <div style="margin-top: 1rem; text-align: center;">
-                <a href="{{ url_for('home') }}" style="color: var(--clr-cyan); text-decoration: none; font-size: 0.9rem;">← Back to Home</a>
+                <a href="{% url 'home' %}" style="color: var(--clr-cyan); text-decoration: none; font-size: 0.9rem;">← Back to Home</a>
             </div>
         </div>
     </div>

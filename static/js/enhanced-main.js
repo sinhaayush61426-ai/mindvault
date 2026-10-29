@@ -6,7 +6,7 @@ function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', async () => {
       try {
-        const registration = await navigator.serviceWorker.register('/static/js/service-worker.js', {
+        const registration = await navigator.serviceWorker.register('/service-worker.js', {
           scope: '/'
         });
         console.log('✓ Service Worker registered:', registration);
@@ -39,7 +39,7 @@ function showUpdateNotification() {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
-    background: rgba(0, 242, 255, 0.12);
+    background: rgba(91, 145, 255, 0.12);
     border: 2px solid var(--clr-cyan);
     border-radius: 8px;
     padding: 1.5rem;
@@ -162,79 +162,130 @@ class ZenMode {
 // --- DRAFT AUTO-SAVE ---
 class DraftAutoSave {
   constructor() {
-    this.saveInterval = 30000; // 30 seconds
+    this.form = document.querySelector('form[data-autosave-url]');
+    if (!this.form) return;
+
+    this.saveInterval = 30000;
+    this.isDirty = false;
+    this.pendingSave = null;
+    this.allowNextSubmit = false;
+    this.lastSavedValue = this.currentValue();
     this.initializeAutoSave();
   }
 
   initializeAutoSave() {
-    const textarea = document.querySelector('textarea[name="content"]');
-    const titleInput = document.querySelector('input[name="title"]');
-    
-    if (textarea || titleInput) {
-      setInterval(() => this.saveDraft(), this.saveInterval);
-      
-      // Also save on blur
-      if (textarea) textarea.addEventListener('blur', () => this.saveDraft());
-      if (titleInput) titleInput.addEventListener('blur', () => this.saveDraft());
-    }
+    this.form.addEventListener('input', () => {
+      this.isDirty = true;
+    });
+    this.form.addEventListener('focusout', () => this.saveDraft());
+    window.setInterval(() => this.saveDraft(), this.saveInterval);
+
+    this.form.addEventListener('submit', (event) => {
+      if (this.allowNextSubmit) {
+        this.allowNextSubmit = false;
+        return;
+      }
+
+      const save = this.saveDraft();
+      if (!save) return;
+
+      event.preventDefault();
+      const submitter = event.submitter;
+      save.finally(() => {
+        this.allowNextSubmit = true;
+        if (submitter) {
+          this.form.requestSubmit(submitter);
+        } else {
+          this.form.requestSubmit();
+        }
+      });
+    });
+  }
+
+  currentValue() {
+    const formData = new FormData(this.form);
+    return JSON.stringify({
+      title: formData.get('title') || '',
+      content: formData.get('content') || '',
+      category: formData.get('category') || 'General'
+    });
   }
 
   saveDraft() {
-    const textarea = document.querySelector('textarea[name="content"]');
-    const titleInput = document.querySelector('input[name="title"]');
-    
-    if (!textarea || !titleInput) return;
-
-    const draft = {
-      title: titleInput.value,
-      content: textarea.value,
-      timestamp: new Date().toISOString()
-    };
-
-    localStorage.setItem('mindvault_draft', JSON.stringify(draft));
-    this.showSaveIndicator();
-  }
-
-  showSaveIndicator() {
-    let indicator = document.getElementById('save-indicator');
-    if (!indicator) {
-      indicator = document.createElement('div');
-      indicator.id = 'save-indicator';
-      indicator.style.cssText = `
-        position: fixed;
-        bottom: 1.5rem;
-        left: 1.5rem;
-        background: rgba(0, 242, 255, 0.12);
-        border: 1px solid var(--clr-cyan);
-        color: var(--clr-cyan);
-        padding: 0.75rem 1.5rem;
-        border-radius: 4px;
-        font-size: 0.85rem;
-        z-index: 999;
-      `;
-      document.body.appendChild(indicator);
+    if (this.pendingSave) return this.pendingSave;
+    const savedValue = this.currentValue();
+    if (!this.isDirty || savedValue === this.lastSavedValue) {
+      this.isDirty = false;
+      return null;
     }
 
-    indicator.textContent = '✓ Draft saved';
-    indicator.style.opacity = '1';
+    const title = this.form.elements.namedItem('title');
+    const content = this.form.elements.namedItem('content');
+    const category = this.form.elements.namedItem('category');
+    const csrfToken = this.form.querySelector('[name="csrfmiddlewaretoken"]')?.value;
+    if (!title || !content || !csrfToken) {
+      this.showSaveIndicator('Automatic save is unavailable. Save your changes manually.');
+      return null;
+    }
 
-    setTimeout(() => {
-      indicator.style.opacity = '0';
-    }, 2000);
+    const body = new FormData();
+    body.set('title', title.value);
+    body.set('content', content.value);
+    body.set('category', category?.value || 'General');
+    const entryId = this.form.dataset.entryId;
+    const draftId = this.form.elements.namedItem('draft_id')?.value;
+    if (entryId) body.set('entry_id', entryId);
+    if (draftId) body.set('draft_id', draftId);
+
+    this.pendingSave = (async () => {
+      try {
+        const response = await fetch(this.form.dataset.autosaveUrl, {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {'X-CSRFToken': csrfToken},
+          body
+        });
+
+        if (response.status === 204) {
+          this.lastSavedValue = savedValue;
+          this.isDirty = this.currentValue() !== savedValue;
+          this.showSaveIndicator('Your changes are saved in the encrypted vault.');
+          return true;
+        }
+
+        const contentType = response.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+          throw new Error('The server did not return a save confirmation.');
+        }
+        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(result.error || 'The server rejected the draft.');
+        }
+
+        if (result.draft_id) {
+          const draftIdInput = this.form.elements.namedItem('draft_id');
+          if (draftIdInput) draftIdInput.value = result.draft_id;
+        }
+        this.lastSavedValue = savedValue;
+        this.isDirty = this.currentValue() !== savedValue;
+        this.showSaveIndicator('Your changes are saved in the encrypted vault.');
+        return true;
+      } catch (error) {
+        console.error('MindVault could not save the current draft.', error);
+        this.isDirty = true;
+        this.showSaveIndicator('Automatic save failed. Save manually and check your connection.');
+        return false;
+      } finally {
+        this.pendingSave = null;
+      }
+    })();
+
+    return this.pendingSave;
   }
 
-  loadDraft() {
-    const savedDraft = localStorage.getItem('mindvault_draft');
-    if (savedDraft) {
-      const draft = JSON.parse(savedDraft);
-      const textarea = document.querySelector('textarea[name="content"]');
-      const titleInput = document.querySelector('input[name="title"]');
-      
-      if (textarea) textarea.value = draft.content;
-      if (titleInput) titleInput.value = draft.title;
-      
-      console.log('✓ Draft loaded from auto-save');
-    }
+  showSaveIndicator(message) {
+    const indicator = document.getElementById('save-indicator');
+    if (indicator) indicator.textContent = message;
   }
 }
 
@@ -307,7 +358,13 @@ function setupFlashMessageDismissal() {
   const flashMessages = document.querySelectorAll('.flash');
   
   flashMessages.forEach(flash => {
-    // Automatically remove flash message after 3-4 seconds
+    if (
+      flash.classList.contains('flash-error') ||
+      flash.classList.contains('flash-warning')
+    ) {
+      return;
+    }
+
     setTimeout(() => {
       flash.style.opacity = '0';
       flash.style.transform = 'translateX(420px)';
@@ -354,9 +411,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const zenMode = new ZenMode();
   window.zenMode = zenMode;
 
-  // Initialize Auto-Save
+  // Initialize encrypted server-side draft saving
   const autoSave = new DraftAutoSave();
-  autoSave.loadDraft();
   window.autoSave = autoSave;
 
   // Initialize Character Matrix

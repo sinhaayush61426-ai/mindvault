@@ -9,11 +9,12 @@
             <h4 class="text-highlight" style="margin-bottom: 1.5rem; letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem;">Vault Archive</h4>
             {% if entries %}
                 {% for entry in entries %}
-                <a href="{{ url_for('view_entry', entry_id=entry.id) }}" style="text-decoration: none; color: inherit;">
-                    <article class="card" style="margin-bottom: 1rem; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(0, 242, 255, 0.05)'" onmouseout="this.style.background='transparent'">
-                        <small class="text-muted">{{ entry.category | default('General') }}</small>
-                        <div style="margin-top: 0.6rem; font-weight: 700; color: var(--clr-cyan);">{{ entry.title }}</div>
-                        {% if entry.is_time_locked %}<div style="margin-top: 0.4rem; font-size: 0.8rem; color: var(--clr-pink);">🔒 Time-Locked</div>{% endif %}
+                <a href="{% url 'view_entry' entry_id=entry.id %}" style="text-decoration: none; color: inherit;">
+                    <article class="card entry-card">
+                        <small class="text-muted">{{ entry.category|default:'General' }}</small>
+                        <div class="entry-card-title">{{ entry.title }}</div>
+                        {% if entry.is_locked %}<div class="entry-lock">Time-locked</div>{% endif %}
+                        {% if entry.is_draft %}<div class="entry-draft">Unsealed draft</div>{% endif %}
                     </article>
                 </a>
                 {% endfor %}
@@ -25,9 +26,12 @@
 
     <main class="pane pane-center">
         <div class="glass-panel form-card">
-            <form action="{{ url_for('seal_letter') }}" method="POST">
+            <form action="{% url 'seal_letter' %}" method="POST" data-autosave-url="{% url 'autosave_entry' %}">
+                {% csrf_token %}
+                <input type="hidden" name="draft_id" value="">
                 <div class="form-field">
-                    <input type="text" name="title" placeholder="Project Title..." style="background: transparent; border: none; color: #fff; font-size: 2.5rem; font-weight: 900; width: 100%; outline: none;" required>
+                    <label class="visually-hidden" for="entry-title">Entry title</label>
+                    <input class="entry-title-input" id="entry-title" type="text" name="title" placeholder="Project title..." maxlength="100" required>
                 </div>
 
                 <div class="form-field">
@@ -42,21 +46,23 @@
                 </div>
 
                 <div class="form-field">
-                    <textarea name="content" placeholder="Start writing..."></textarea>
+                    <label class="visually-hidden" for="entry-content">Entry content</label>
+                    <textarea id="entry-content" name="content" placeholder="Start writing..." maxlength="1000000"></textarea>
                 </div>
 
-                <div class="form-field" style="background: var(--bg-surface-alt); padding: 1rem; border-radius: 6px; border: 1px solid var(--border);">
-                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 0.5rem;">
-                        <input type="checkbox" id="time-lock-toggle" name="enable_time_lock" style="cursor: pointer; width: 18px; height: 18px;">
-                        <span>🔒 Time-Lock this entry (optional)</span>
+                <div class="form-field time-lock-panel">
+                    <label class="time-lock-label" for="time-lock-toggle">
+                        <input type="checkbox" id="time-lock-toggle" name="enable_time_lock">
+                        <span>Time-lock this entry (optional)</span>
                     </label>
-                    <div id="time-lock-field" style="display: none; margin-top: 0.5rem;">
+                    <div id="time-lock-field" hidden>
                         <label for="release_date">Release Date & Time</label>
-                        <input type="datetime-local" id="release_date" name="release_date" style="width: 100%; padding: 0.75rem; background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-primary); border-radius: 4px;">
+                        <input type="datetime-local" id="release_date" name="release_date">
                     </div>
                 </div>
 
                 <div class="submit-block">
+                    <button id="zen-toggle" type="button" class="btn btn-secondary">Focus mode</button>
                     <button type="submit" class="btn btn-primary">
                         <svg class="icon icon-sm icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M19 12H5M12 19l-7-7 7-7"></path>
@@ -64,6 +70,7 @@
                         Seal Entry
                     </button>
                 </div>
+                <p class="autosave-status" id="save-indicator" role="status" aria-live="polite">Automatic saves require a connection; entry text is encrypted before storage.</p>
             </form>
         </div>
     </main>
@@ -80,10 +87,12 @@
     // Toggle time-lock field visibility
     const timeLockToggle = document.getElementById('time-lock-toggle');
     const timeLockField = document.getElementById('time-lock-field');
-    
+    const releaseDateInput = document.getElementById('release_date');
+
     if (timeLockToggle) {
         timeLockToggle.addEventListener('change', function() {
-            timeLockField.style.display = this.checked ? 'block' : 'none';
+            timeLockField.hidden = !this.checked;
+            releaseDateInput.required = this.checked;
         });
     }
 
@@ -92,10 +101,10 @@
     if (form) {
         form.addEventListener('submit', function(e) {
             if (timeLockToggle && timeLockToggle.checked) {
-                const releaseDate = document.getElementById('release_date').value;
+                const releaseDate = releaseDateInput.value;
                 if (!releaseDate) {
                     e.preventDefault();
-                    alert('Please select a release date for time-locked entries');
+                    releaseDateInput.reportValidity();
                 }
             }
         });
